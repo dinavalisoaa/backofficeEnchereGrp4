@@ -195,52 +195,52 @@ public class TypeController {
 //        return "redirect:type";
 //    }
 
-    @RequestMapping("/login")
-    public String AjoutTheme(HttpServletRequest request, Model model) {
-        model.addAttribute("content", "type");
-        model.addAttribute("contentpath", "View/type");
-        return "index";
-    }
-    @RequestMapping("/index")
+//    @RequestMapping("/login")
+//    public String AjoutTheme(HttpServletRequest request, Model model) {
+//        model.addAttribute("content", "type");
+//        model.addAttribute("contentpath", "View/type");
+//        return "index";
+//    }
+    @RequestMapping("/")
     public String AsjoutTheme(HttpServletRequest request, Model model) {
         model.addAttribute("content", "type");
         model.addAttribute("contentpath", "View/type");
         return "index";
     }
-     
-  @RequestMapping("/categorie")
-    public String AjoutThesme(HttpServletRequest request, Model model) throws Exception {
-        model.addAttribute("categorie", Categorie.categories());
-        return "categories";
-    }
-    
-  @RequestMapping("/parametrages")
-    public String AsjoutThesme(HttpServletRequest request, Model model) throws Exception {
-        model.addAttribute("parametrages", Parametrage.parametrages());
-        return "parametrages";
-    }
-     @RequestMapping("/updateParametrages")
-    public String up(HttpServletRequest request, Model model) throws Exception {
-        Parametrage gorie=new Parametrage();
-        gorie.setValue(request.getParameter("value"));
-        gorie.setId(Integer.parseInt(request.getParameter("id").toString()));
-        gorie.update("Id",null);
-        model.addAttribute("parametrages", Parametrage.parametrages());
-        return "redirect:parametrages";
-    } 
-    @GetMapping("/actionlogin")
-    public String actionlogin(HttpServletRequest request, Model model) throws Exception {
-        model.addAttribute("content", "type");
-        Admin min = new Admin();
-        min.setMdp(request.getParameter("mdp"));
-        min.setLogin(request.getParameter("login"));
-        model.addAttribute("contentpath", "View/type");
-        if (min.getLoginId() == -1) {
-            return "redirect:actionlogin";
-        }
-        model.addAttribute("categorie", Categorie.categories());
-        return "home";
-    }
+//     
+//  @RequestMapping("/categorie")
+//    public String AjoutThesme(HttpServletRequest request, Model model) throws Exception {
+//        model.addAttribute("categorie", Categorie.categories());
+//        return "categories";
+//    }
+//    
+//  @RequestMapping("/parametrages")
+//    public String AsjoutThesme(HttpServletRequest request, Model model) throws Exception {
+//        model.addAttribute("parametrages", Parametrage.parametrages());
+//        return "parametrages";
+//    }
+//     @RequestMapping("/updateParametrages")
+//    public String up(HttpServletRequest request, Model model) throws Exception {
+//        Parametrage gorie=new Parametrage();
+//        gorie.setValue(request.getParameter("value"));
+//        gorie.setId(Integer.parseInt(request.getParameter("id").toString()));
+//        gorie.update("Id",null);
+//        model.addAttribute("parametrages", Parametrage.parametrages());
+//        return "redirect:parametrages";
+//    } 
+//    @GetMapping("/actionlogin")
+//    public String actionlogin(HttpServletRequest request, Model model) throws Exception {
+//        model.addAttribute("content", "type");
+//        Admin min = new Admin();
+//        min.setMdp(request.getParameter("mdp"));
+//        min.setLogin(request.getParameter("login"));
+//        model.addAttribute("contentpath", "View/type");
+//        if (min.getLoginId() == -1) {
+//            return "redirect:actionlogin";
+//        }
+//        model.addAttribute("categorie", Categorie.categories());
+//        return "home";
+//    }
 
 
 }

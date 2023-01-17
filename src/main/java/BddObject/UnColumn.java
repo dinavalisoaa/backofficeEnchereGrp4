@@ -23,6 +23,6 @@ import javax.lang.model.element.Element;
 @Target(ElementType.FIELD)
 public @interface UnColumn {
     public boolean yes()default false;
-//    public String va;
+//    public String va;ss
     
 }

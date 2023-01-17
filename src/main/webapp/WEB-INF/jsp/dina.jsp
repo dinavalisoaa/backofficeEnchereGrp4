@@ -38,7 +38,10 @@
       <form class="form-login" action="actionlogin" method="get">
         <h2 class="form-login-heading">Login Admin</h2>
         <div class="login-wrap">
-             <h2>DINA</h2>
+             <h2>DINA
+             <%="I12498908"%>
+             <p th:text="${anjara}"></p>
+             </h2>
           <input type="text" name="login"  class="form-control" value="root"placeholder="User ID" autofocus>
           <br>
           <input type="password" class="form-control" value="root" name="mdp" placeholder="Password">

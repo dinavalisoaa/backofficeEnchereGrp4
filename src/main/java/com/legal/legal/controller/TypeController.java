@@ -210,6 +210,14 @@ public class TypeController {
         model.addAttribute("contentpath", "View/type");
         return "index";
     }
+    @RequestMapping("/dina")
+    public String AssjoutTheme(HttpServletRequest request, Model model) {
+        model.addAttribute("content", "type");
+        model.addAttribute("contentpath", "View/type");
+        model.addAttribute("anjara", "1384");
+
+        return "dina";
+    }
 //     
 //  @RequestMapping("/categorie")
 //    public String AjoutThesme(HttpServletRequest request, Model model) throws Exception {

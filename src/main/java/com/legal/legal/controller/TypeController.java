@@ -10,6 +10,8 @@ import model.Parametrage;
 //import com.itextpdf.text.pdf.parser.Path;
 //import com.legal.legal.model.Type;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.util.HtmlUtils;
 //import com.legal.legal.repository.ThematiqueRepository;
 //import com.legal.legal.repository.TypeRepository;
 @Controller
+ @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class TypeController {
 //y typeRep;
 //    @Autowired

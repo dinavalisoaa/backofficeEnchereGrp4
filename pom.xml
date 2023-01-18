@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.kante</groupId>
-	<artifactId>kanteco</artifactId>
+	<artifactId>BackOfficeEnchere</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>kanteco</name>
+	<name>backOfficeEnchere</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>8</java.version>

@@ -1,11 +1,9 @@
 package model;
 
-import BddObject.Connexion;
+import BddObject.Ignore;
 import BddObject.InfoDAO;
 import BddObject.ObjectBDD;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -19,7 +17,47 @@ public class EnchereMove extends ObjectBDD {
     private int state = -1;
     private int usersId = -1;
     private int enchereId = -1;
+    private int commissionId = -1;
     private int id = -1;
+    @Ignore
+    Users user;
+
+    @Ignore
+    Enchere enchere;
+
+    public int getCommissionId() {
+        return commissionId;
+    }
+
+    public void setCommissionId(int commissionId) {
+        this.commissionId = commissionId;
+    }
+
+    public Enchere getEnchere() {
+        return enchere;
+    }
+
+    public void setEnchere(Enchere enchere) {
+        this.enchere = enchere;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void insert(Connection con) throws Exception {
+        this.setCommissionId(new Commission().getCurrentId().getId());
+        super.insert(con);
+    }
+//     @Override
+//    public void insert(Connection con) throws Exception{
+////        super.insert(con);
+//        
+//}
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
 
     public String getDateMise() {
         return this.dateMise;
@@ -48,12 +86,12 @@ public class EnchereMove extends ObjectBDD {
     }
 
     public void setPrixMise(double prixMise) throws Exception {
-        if (prixMise < this.getUsers().getCurrentMoney()) {
+        System.out.println(this.getUsers().getCurrentMoney());
+        if (prixMise > this.getUsers().getCurrentMoney()) {
             throw new Exception("Solde inferieur");
         } else {
             this.prixMise = prixMise;
         }
-
     }
 
     public int getState() {

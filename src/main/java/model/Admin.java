@@ -22,15 +22,7 @@ public class Admin extends ObjectBDD {
 	public int getId() {
 		return this.id;
 	}
-  
-public int getLoginId() throws Exception{
-    this.setMdp(mdp);
-    this.setLogin(login);
-    if(this.select(null).size()>0){
-        return ((Admin)this.select(null).get(0)).getId();
-    }
-    return -1;
-}
+
 	/**
 	 * 
 	 * @param id
@@ -62,5 +54,12 @@ public int getLoginId() throws Exception{
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
 	}
-
+public int getLoginId() throws Exception{
+    this.setMdp(mdp);
+    this.setLogin(login);
+    if(this.select(null).size()>0){
+        return ((Admin)this.select(null).get(0)).getId();
+    }
+    return -1;
+}
 }

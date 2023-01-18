@@ -1,11 +1,14 @@
 package com.legal.legal.controller;
 
 import java.nio.file.Paths;
+import java.time.LocalDate;
 
 import javax.servlet.http.HttpServletRequest;
 import model.Admin;
 import model.Categorie;
+import model.DemandeRechargement;
 import model.Parametrage;
+import model.Stat;
 
 //import com.itextpdf.text.pdf.parser.Path;
 //import com.legal.legal.model.Type;
@@ -24,8 +27,147 @@ import org.springframework.web.util.HtmlUtils;
 //import com.legal.legal.repository.ThematiqueRepository;
 //import com.legal.legal.repository.TypeRepository;
 @Controller
- @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class TypeController {
+
+    @RequestMapping("/")
+    public String AsjoutTheme(HttpServletRequest request, Model model) {
+        model.addAttribute("content", "type");
+        model.addAttribute("contentpath", "View/type");
+        return "index";
+    }
+
+    @RequestMapping("/dina")
+    public String AssjoutTheme(HttpServletRequest request, Model model) {
+        model.addAttribute("content", "type");
+        model.addAttribute("contentpath", "View/type");
+        model.addAttribute("anjara", "1384");
+
+        return "dina";
+    }
+
+//     
+    @RequestMapping("/categorie")
+    public String AjoutThesme(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("categorie", Categorie.categories());
+        return "categories";
+    }
+
+    @RequestMapping("/newCat")
+    public String newCat(HttpServletRequest request, Model model) throws Exception {
+        Categorie gor = new Categorie();
+        gor.setNom(request.getParameter("nom"));
+//        gor.setId(Integer.parseInt(request.getParameter("id").toString()));
+        gor.insert(null);
+        return "redirect:categorie";
+    }
+
+    @RequestMapping("/delCat")
+    public String delCat(HttpServletRequest request, Model model) throws Exception {
+        Categorie gor = new Categorie();
+//        gor.setId(request.getParameter("id"));
+        gor.setId(Integer.parseInt(request.getParameter("id").toString()));
+        gor.delete("id", null);
+        return "redirect:categorie";
+    }
+
+    @RequestMapping("/parametrages")
+    public String AsjoutThesme(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("parametrages", new Parametrage().parametrages());
+        return "parametrages";
+    }
+
+    @RequestMapping("/statistiques")
+    public String statistiques(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("parametrages", new Parametrage().parametrages());
+        return "statistiques";
+    }
+    @RequestMapping("/classementCategorie")
+    public String classementCategorie(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("classement",Stat.categorieLePlusAimes());
+        return "classementCategorie";
+    }
+    
+    @RequestMapping("/classementUtilisateur")
+    public String classementUtilisateur(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("classement",new Stat().activiteUsers());
+        return "classementUtilisateur";
+    }
+    
+
+    @RequestMapping("/demandes")
+    public String demandes(HttpServletRequest request, Model model) throws Exception {
+        DemandeRechargement dems = new DemandeRechargement();
+        if (request.getParameter("etat") != null) {
+            int ref = Integer.valueOf(request.getParameter("etat").toString());
+            {
+                dems.setState(ref);
+            }
+            if (ref == 0) {
+                model.addAttribute("title", "Liste de demande attente");
+
+            } else if (ref == 1) {
+                model.addAttribute("title", "Liste de demande valider");
+            } else {
+                model.addAttribute("title", "Liste de demande refuser");
+
+            }
+        } else {
+            model.addAttribute("title", "Liste de demande");
+        }
+
+        DemandeRechargement[] dem = dems.getDemandes();
+        model.addAttribute("demande", dem);
+
+        return "demande";
+    }
+
+    @RequestMapping("/updateParametrages")
+    public String up(HttpServletRequest request, Model model) throws Exception {
+        Parametrage gorie = new Parametrage();
+        gorie.setValue(request.getParameter("value"));
+        gorie.setId(Integer.parseInt(request.getParameter("id").toString()));
+        gorie.update("Id", null);
+        model.addAttribute("parametrages", new Parametrage().parametrages());
+        return "redirect:parametrages";
+    }
+
+    @RequestMapping("/validerdemande")
+    public String valider(HttpServletRequest request, Model model) throws Exception {
+        DemandeRechargement dmd = new DemandeRechargement();
+//        dmd.setMontant(0);
+        dmd.setId(Integer.parseInt(request.getParameter("id").toString()));
+        dmd.setState(0);
+        dmd.setDateValidation(LocalDate.now().toString());
+        dmd.update("Id", null);
+        model.addAttribute("parametrages", new Parametrage().parametrages());
+        return "redirect:demandes";
+    }
+
+    @RequestMapping("/refuserdemande")
+    public String refuser(HttpServletRequest request, Model model) throws Exception {
+        DemandeRechargement dmd = new DemandeRechargement();
+        dmd.setId(Integer.parseInt(request.getParameter("id").toString()));
+        dmd.setState(11);
+        dmd.setDateValidation(LocalDate.now().toString());
+        dmd.update("Id", null);
+        model.addAttribute("parametrages", new Parametrage().parametrages());
+        return "redirect:demandes";
+    }
+
+    @GetMapping("/actionlogin")
+    public String actionlogin(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("content", "type");
+        Admin min = new Admin();
+        min.setMdp(request.getParameter("mdp"));
+        min.setLogin(request.getParameter("login"));
+        model.addAttribute("contentpath", "View/type");
+        if (min.getLoginId() == -1) {
+            return "redirect:actionlogin";
+        }
+        model.addAttribute("categorie", Categorie.categories());
+        return "categories";
+    }
 //y typeRep;
 //    @Autowired
 //    ThematiqueRepository tRep;
@@ -204,54 +346,4 @@ public class TypeController {
 //        model.addAttribute("contentpath", "View/type");
 //        return "index";
 //    }
-    @RequestMapping("/")
-    public String AsjoutTheme(HttpServletRequest request, Model model) {
-        model.addAttribute("content", "type");
-        model.addAttribute("contentpath", "View/type");
-        return "index";
-    }
-    @RequestMapping("/dina")
-    public String AssjoutTheme(HttpServletRequest request, Model model) {
-        model.addAttribute("content", "type");
-        model.addAttribute("contentpath", "View/type");
-        model.addAttribute("anjara", "1384");
-
-        return "dina";
-    }
-//     
-//  @RequestMapping("/categorie")
-//    public String AjoutThesme(HttpServletRequest request, Model model) throws Exception {
-//        model.addAttribute("categorie", Categorie.categories());
-//        return "categories";
-//    }
-//    
-//  @RequestMapping("/parametrages")
-//    public String AsjoutThesme(HttpServletRequest request, Model model) throws Exception {
-//        model.addAttribute("parametrages", Parametrage.parametrages());
-//        return "parametrages";
-//    }
-//     @RequestMapping("/updateParametrages")
-//    public String up(HttpServletRequest request, Model model) throws Exception {
-//        Parametrage gorie=new Parametrage();
-//        gorie.setValue(request.getParameter("value"));
-//        gorie.setId(Integer.parseInt(request.getParameter("id").toString()));
-//        gorie.update("Id",null);
-//        model.addAttribute("parametrages", Parametrage.parametrages());
-//        return "redirect:parametrages";
-//    } 
-//    @GetMapping("/actionlogin")
-//    public String actionlogin(HttpServletRequest request, Model model) throws Exception {
-//        model.addAttribute("content", "type");
-//        Admin min = new Admin();
-//        min.setMdp(request.getParameter("mdp"));
-//        min.setLogin(request.getParameter("login"));
-//        model.addAttribute("contentpath", "View/type");
-//        if (min.getLoginId() == -1) {
-//            return "redirect:actionlogin";
-//        }
-//        model.addAttribute("categorie", Categorie.categories());
-//        return "home";
-//    }
-
-
 }

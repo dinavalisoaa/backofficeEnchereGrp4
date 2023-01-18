@@ -6,6 +6,7 @@
 package model;
 
 import BddObject.Connexion;
+import BddObject.Ignore;
 import BddObject.InfoDAO;
 import BddObject.ObjectBDD;
 import java.sql.Connection;
@@ -25,11 +26,38 @@ public class DemandeRechargement extends ObjectBDD {
     int usersId = -1;//        int4 NOT NULL, 
     double montant = -1;//        float8, 
     String dateValidation;
+   public Users getUsers() throws Exception{
+   Users i=new Users();
+   i.setId(this.usersId);
+   return i.getUsers();
+   }
 
-    public Users getUsers() throws Exception {
-        Users us = new Users();
+    public int getUsersId() {
+        return usersId;
+    }
+
+    public void setUsersId(int usersId) {
+        this.usersId = usersId;
+    }
+    public String getValidation(){
+    if(state==1)return "Valider";
+     if(state==11)return "Refuser";
+    return "Attente";
+    }
+      public  DemandeRechargement[] getDemandes() throws Exception {
+        ArrayList lis = new DemandeRechargement().select(null);
+        DemandeRechargement[] oo = new DemandeRechargement[lis.size()];
+        for (int i = 0; i < oo.length; i++) {
+            oo[i] = (DemandeRechargement) lis.get(i);
+        }
+        return oo;
+    }
+
+   
+    public DemandeRechargement getDemandeRechargement() throws Exception {
+        DemandeRechargement us = new DemandeRechargement();
         us.setId(this.usersId);
-        return ((Users) us.select(null).get(0));
+        return ((DemandeRechargement) us.select(null).get(0));
     }
 
     public int getId() {
@@ -56,11 +84,11 @@ public class DemandeRechargement extends ObjectBDD {
         this.state = state;
     }
 
-    public int getUsersId() {
+    public int getDemandeRechargementId() {
         return usersId;
     }
 
-    public void setUsersId(int usersId) {
+    public void setDemandeRechargementId(int usersId) {
         this.usersId = usersId;
     }
 
@@ -69,7 +97,7 @@ public class DemandeRechargement extends ObjectBDD {
     }
 
     public void setMontant(double montant) throws Exception {
-//        if (montant < this.getUsers().getCurrentMoney()) {
+//        if (montant < this.getDemandeRechargement().getCurrentMoney()) {
 //            throw new Exception("Solde inferieur");
 //        } else {
             this.montant = montant;

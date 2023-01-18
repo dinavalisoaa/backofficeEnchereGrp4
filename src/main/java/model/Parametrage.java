@@ -23,14 +23,7 @@ public class Parametrage extends ObjectBDD {
 	public int getId() {
 		return this.id;
 	}
-public static Parametrage[] parametrages() throws Exception {
-        ArrayList lis = new Parametrage().select(null);
-        Parametrage[] oo = new Parametrage[lis.size()];
-        for (int i = 0; i < oo.length; i++) {
-            oo[i] = (Parametrage) lis.get(i);
-        }
-        return oo;
-    }
+
 	/**
 	 * 
 	 * @param id
@@ -38,7 +31,14 @@ public static Parametrage[] parametrages() throws Exception {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+ public  Parametrage[] parametrages() throws Exception {
+        ArrayList lis = new Parametrage().select(null);
+        Parametrage[] oo = new Parametrage[lis.size()];
+        for (int i = 0; i < oo.length; i++) {
+            oo[i] = (Parametrage) lis.get(i);
+        }
+        return oo;
+    }
 	public String getValue() {
 		return this.value;
 	}

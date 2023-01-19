@@ -24,7 +24,19 @@ public class EnchereMove extends ObjectBDD {
 
     @Ignore
     Enchere enchere;
+    @Ignore
+    Commission commision;
+    @Ignore
+    Users users;
 
+    public Commission getCommision() {
+        return commision;
+    }
+
+    public void setCommision(Commission commision) {
+        this.commision = commision;
+    }
+    
     public int getCommissionId() {
         return commissionId;
     }
@@ -86,12 +98,12 @@ public class EnchereMove extends ObjectBDD {
     }
 
     public void setPrixMise(double prixMise) throws Exception {
-        System.out.println(this.getUsers().getCurrentMoney());
-        if (prixMise > this.getUsers().getCurrentMoney()) {
-            throw new Exception("Solde inferieur");
-        } else {
+//        System.out.println(this.getUsers().getCurrentMoney());
+//        if (prixMise > this.getUsers().getCurrentMoney()) {
+//            throw new Exception("Solde inferieur");
+//        } else {
             this.prixMise = prixMise;
-        }
+//        }
     }
 
     public int getState() {

@@ -45,7 +45,6 @@ public class Users extends ObjectBDD {
     public void setRentabilite(double rentabilite) {
         this.rentabilite = rentabilite;
     }
-    
 
     public double getMiseGagnant() {
         return miseGagnant;
@@ -54,18 +53,15 @@ public class Users extends ObjectBDD {
     public void setMiseGagnant(double miseGagnant) {
         this.miseGagnant = miseGagnant;
     }
-            
-    
-            
-    
+
     public int getId() {
         return id;
     }
 
     public Users getUsers() throws Exception {
 //    ArrayList<Users>vao=()
-Users tt=new Users();
-tt.setId(this.id);
+        Users tt = new Users();
+        tt.setId(this.id);
         return ((Users) tt.select(null).get(0));
     }
 
@@ -137,8 +133,6 @@ tt.setId(this.id);
         this.nom = nom;
     }
 
-    
-
     public int getNbEnchereFait() {
         return nbEnchereFait;
     }
@@ -171,16 +165,22 @@ tt.setId(this.id);
             connection.close();
             return valiny;
         }
-    }public double getNbEnchereGagner() throws SQLException {
+    }
+
+    public double getNbEnchereGagner(Connection con) throws Exception {
         ArrayList<Users> valiny = new ArrayList();
         Connection connection = null;
-                        Users users = new Users();
+        Users users = new Users();
+        users.setId(this.id);
+//                        users=users.getUsers();
 
         try {
-            connection = Connexion.getConn();
-            String sql = "select count(*) as sum from encheremove where state=1 and usersId="+this.id+"\n";
+
+            String sql = "select count(*) as sum from encheremove where state=1 and usersId=" + this.id + "\n";
 //                    + "group by usersid";
-            PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
+            System.err.println("[[[" + sql);
+
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
 //                users.setId(resultSet.getInt("usersid"));
@@ -193,10 +193,46 @@ tt.setId(this.id);
             e.printStackTrace();
             throw e;
         } finally {
-            connection.close();
+
             return users.getEnchereGagner();
         }
     }
+
+    public double getEnchereEffectuer(Connection con) throws SQLException {
+        ArrayList<Users> valiny = new ArrayList();
+        Users users = new Users();
+        users.setId(this.id);
+
+        try {
+            String sql = "select count(*) as sum from encheremove where  usersId=" + this.id + "\n";
+//                    + "group by usersid";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+//                users.setId(resultSet.getInt("usersid"));
+                //System.out.println(resultSet.getInt("usersid"));
+                users.setNbEnchereFait(resultSet.getInt("sum"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            return users.getNbEnchereFait();
+        }
+    }
+
+    public double getEfficacite(Connection con) throws Exception {
+        double win = getNbEnchereGagner(con);
+        double fait = getEnchereEffectuer(con);
+////        if()
+//        fait-->100
+//         win   ?
+        if (fait != 0) {
+            return 100 * win / fait;
+        }
+        return 0;
+    }
+
     public Users getUserCompteLePlusRecharg() throws SQLException {
         Users valiny = null;
         Connection connection = null;
@@ -239,6 +275,5 @@ tt.setId(this.id);
     public void setNbrechargeCompte(int nbrechargeCompte) {
         this.nbrechargeCompte = nbrechargeCompte;
     }
-    
 
 }

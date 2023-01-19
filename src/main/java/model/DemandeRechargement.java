@@ -26,6 +26,17 @@ public class DemandeRechargement extends ObjectBDD {
     int usersId = -1;//        int4 NOT NULL, 
     double montant = -1;//        float8, 
     String dateValidation;
+      @Ignore
+    Users user;
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+    
    public Users getUsers() throws Exception{
    Users i=new Users();
    i.setId(this.usersId);
@@ -41,11 +52,11 @@ public class DemandeRechargement extends ObjectBDD {
     }
     public String getValidation(){
     if(state==1)return "Valider";
-     if(state==11)return "Refuser";
+     if(state==-2)return "Refuser";
     return "Attente";
     }
       public  DemandeRechargement[] getDemandes() throws Exception {
-        ArrayList lis = new DemandeRechargement().select(null);
+        ArrayList lis =this.select(null);
         DemandeRechargement[] oo = new DemandeRechargement[lis.size()];
         for (int i = 0; i < oo.length; i++) {
             oo[i] = (DemandeRechargement) lis.get(i);
@@ -56,7 +67,7 @@ public class DemandeRechargement extends ObjectBDD {
    
     public DemandeRechargement getDemandeRechargement() throws Exception {
         DemandeRechargement us = new DemandeRechargement();
-        us.setId(this.usersId);
+        us.setId(this.id);
         return ((DemandeRechargement) us.select(null).get(0));
     }
 

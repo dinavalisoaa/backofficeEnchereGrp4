@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -28,21 +29,63 @@ public class Enchere extends ObjectBDD {
     private String dateExp;
     private int usersId = -1;
     private int categorieId = -1;
-    private int state = -1;
+    int state = -1;
     private String descriProduit;
     private double durer = -1;
     @Ignore
     Users userGagnant;
     @Ignore
     Categorie cat;
-    @Ignore
-    boolean expirer;
+
     @Ignore
     private int nbPersonne;
     @Ignore
     double pourcentageCommission = -1;
     @Ignore
-    double prixMiseInitial=-1;
+    double prixMiseInitial = -1;
+    @Ignore
+    Users user;
+
+    public ArrayList<Enchere> advancedSearch(String cle) throws Exception {
+        String sql = " select *from enchere join categorie cat on enchere.categorieid=cat.id where 1=1";
+        if (categorieId > 0) {
+            sql += " and categorieId=" + categorieId;
+        }
+        if (cle != null) {
+            sql += " or descriproduit like '%" + cle + "% or nom like %" + cle + "%' ";
+        }
+        if (dateDebut != null) {
+            sql += " and datedebut >" + dateDebut + "";
+        }
+        if (prixMin!=-1) {
+            sql += " and prixMin >" + prixMin + "";
+        }
+        
+        if (state !=-1) {
+            sql += " and state =" + state + "";
+        }
+        if (dateExp != null) {
+            sql += " and dateexp <" + dateExp + "";
+        }
+        
+        ArrayList<Enchere>li=new Enchere().selectBySQL(sql,null);
+      return li;
+    }
+    public int getNbPersonne() {
+        return nbPersonne;
+    }
+
+    public void setNbPersonne(int nbPersonne) {
+        this.nbPersonne = nbPersonne;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
 
     public double getPrixMiseInitial() {
         return prixMiseInitial;
@@ -52,8 +95,17 @@ public class Enchere extends ObjectBDD {
         this.prixMiseInitial = prixMiseInitial;
     }
 
+//     public Users getUser() {
+//        return user;
+//    }
+    public Enchere getEnchere() throws Exception {
+//    ArrayList<Users>vao=()
+        return ((Enchere) this.select(null).get(0));
+    }
 
-    
+//    public void setUser(Users user) {
+//        this.user = user;
+//    }
     public Categorie getCat() throws Exception {
 //    ArrayList<Users>vao=()
         Categorie vo = new Categorie();
@@ -74,20 +126,14 @@ public class Enchere extends ObjectBDD {
         return true;
 
     }
-
-    public void setExpirer(boolean expirer) {
-        this.expirer = expirer;
-    }
+//
+//    public void setExpirer(boolean expirer) {
+//        this.expirer = expirer;
+//    }
+//
 
     public void setCat(Categorie cat) {
         this.cat = cat;
-    }
-
-    public Enchere getEnchere() throws Exception {
-//    ArrayList<Users>vao=()
-        Enchere ch = new Enchere();
-        ch.setId(this.id);
-        return ((Enchere) ch.select(null).get(0));
     }
 
     public Users getUserGagnant() {
@@ -349,8 +395,6 @@ public class Enchere extends ObjectBDD {
         }
     }
 
-   
-
     public double getPourcentageCommission() {
         return pourcentageCommission;
     }
@@ -358,13 +402,13 @@ public class Enchere extends ObjectBDD {
     public void setPourcentageCommission(double pourcentageCommission) {
         this.pourcentageCommission = pourcentageCommission;
     }
-
-    public int getNbPersonne() {
-        return nbPersonne;
-    }
-
-    public void setNbPersonne(int nbPersonne) {
-        this.nbPersonne = nbPersonne;
-    }
+//
+//    public int getNbPersonne() {
+//        return nbPersonne;
+//    }
+//
+//    public void setNbPersonne(int nbPersonne) {
+//        this.nbPersonne = nbPersonne;
+//    }
 
 }

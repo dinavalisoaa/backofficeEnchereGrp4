@@ -18,15 +18,86 @@ import java.util.ArrayList;
  */
 public class Stat {
 
-    public double getChiffreAffaireJour() throws SQLException, Exception {
+    public String htmlStatUser() throws Exception {
+        Connection con = Connexion.getConn();
+        ArrayList<Users> ccat = Stat.getParticipantLePlusRentable(con);
+        String str = "<table style=\"width:80%\" border=\"1\" class=\"table table-striped table-responsive-md\">\n"
+                + "                                            <thead>\n"
+                + "                                                <tr>\n"
+                + "                                                    <th>Categorie</th>          \n"
+                + "                                                    <th>Chiffre</th>\n"
+                + "                                                    <th>Enchere Effectuer</th>\n"
+                + "                                                    <th>Enchere Gagner</th>\n"
+                + "                                                    <th>Efficacite</th>\n"
+                + "                                                </tr>\n"
+                + "                                            </thead>\n"
+                + "                                            <tbody>\n" + "";
+        for (int i = 0; i < ccat.size(); i++) {
+            Users d = (Users) ccat.get(i);
+            str += "<td>" + ccat.get(i).getNom() + "</td>";
+            str += "<td>" + ccat.get(i).getRentabilite() + "Ar</td>";
+            str += "<td>" + ccat.get(i).getEnchereEffectuer(con) + "</td>";
+            str += "<td>" + ccat.get(i).getNbEnchereGagner(con) + "</td>";
+            str += "<td>" + ccat.get(i).getEfficacite(con) + "5</td>";
+            str += "</tr>";
+
+        }
+        str
+                += "       </tbody>\n"
+                + "   </table>\n"
+                + "";
+        con.close();;
+        return str;
+
+    }
+//
+//    public String htmlStatUser() throws Exception {
+//        
+//        Connection con = Connexion.getConn();
+//        ArrayList<Users> ccat = Stat.getParticipantLePlusRentable(con);
+//        String html = "";
+//        String cat = "";
+//        try {
+//            html = "<table style=\"width:80%\" border=\"1\" class=\"table table-striped table-responsive-md\">\n"
+//                    + "                                            <thead>\n"
+//                    + "                                                <tr>\n"
+//                    + "                                                    <th>Categorie</th>          \n"
+//                    + "                                                    <th>Chiffre</th>\n"
+//                    + "                                                    <th>Enchere Effectuer</th>\n"
+//                    + "                                                    <th>Enchere Gagner</th>\n"
+//                    + "                                                    <th>Efficacite</th>\n"
+//                    + "                                                </tr>\n"
+//                    + "                                            </thead>\n"
+//                    + "                                            <tbody>\n" + "";
+//
+//            for (int i = 0; i < ccat.size(); i++) {
+//                cat += "<tr>";
+//                cat += "<td>" + ccat.get(i).getNom() + "</td>";
+//                cat += "<td>" + ccat.get(i).getRentabilite() + "</td>";
+//                cat += "<td>" + ccat.get(i).getEnchereEffectuer(con) + "</td>";
+//                cat += "<td>" + ccat.get(i).getNbEnchereGagner(con) + "</td>";
+//                cat += "<td>" + ccat.get(i).getEfficacite(con) + "</td>";
+//                cat+= "</tr>\n";
+//            }
+//        } catch (Exception ex) {
+//        } finally {
+//          
+//        }
+//
+//        return html
+//                + cat
+//                + " </tbody></table>";
+//    }
+
+    public static double getChiffreAffaireJour(Connection con) throws SQLException, Exception {
         Categorie valiny = null;
         Connection connection = null;
         double retu = 0;
         try {
-            connection = Connexion.getConn();
+
             String sql = "select avg(sum) as avg from (select sum(commission),jour From chiffreEnchere group by jour) as foo;\n"
                     + "";
-            PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 retu = resultSet.getDouble("avg");
@@ -35,21 +106,20 @@ public class Stat {
             e.printStackTrace();
             throw e;
         } finally {
-//            resultSe
-            connection.close();
+
         }
         return retu;
     }
 
-    public double getChiffreAffaireMois() throws SQLException, Exception {
+    public static double getChiffreAffaireMois(Connection con) throws SQLException, Exception {
         Categorie valiny = null;
         Connection connection = null;
         double retu = 0;
         try {
-            connection = Connexion.getConn();
+         
             String sql = "select avg(sum) as avg from (select sum(commission),mois From chiffreEnchere group by mois) as foo;\n"
                     + "";
-            PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
+            PreparedStatement preparedStatement =con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 retu = resultSet.getDouble("avg");
@@ -59,20 +129,20 @@ public class Stat {
             throw e;
         } finally {
 //            resultSe
-            connection.close();
+          
         }
         return retu;
     }
 
-    public double getChiffreAffaireAnnuel() throws SQLException, Exception {
+    public static double getChiffreAffaireAnnuel(Connection con) throws SQLException, Exception {
         Categorie valiny = null;
-        Connection connection = null;
         double retu = 0;
+        
         try {
-            connection = Connexion.getConn();
+            
             String sql = "select avg(sum) as avg from (select sum(commission),annee From chiffreEnchere group by annee) as foo;\n"
                     + "";
-            PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
+            PreparedStatement preparedStatement =con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 retu = resultSet.getDouble("avg");
@@ -82,22 +152,21 @@ public class Stat {
             throw e;
         } finally {
 //            resultSe
-            connection.close();
         }
         return retu;
     }
 
-    public static ArrayList<Categorie> categorieLePlusAimes() throws SQLException {
+    public static ArrayList<Categorie> categorieLePlusAimes(Connection con) throws Exception {
         Categorie valiny = null;
-        Connection connection = null;
+ResultSet resultSet=null;     PreparedStatement preparedStatement =null;
         ArrayList<Categorie> va = new ArrayList<Categorie>();
         try {
-            connection = Connexion.getConn();
+           
             String sql = "select count(en.categorieid) as isa ,cat.id from categorie cat full join encheremove emv join enchere en on en.id=emv.enchereid  \n"
                     + "  on cat.id=en.categorieid group by cat.id \n"
                     + " order by isa desc";
-            PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
+         preparedStatement = con.prepareStatement(sql);
+             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Categorie categorie = new Categorie();
                 categorie.setId(resultSet.getInt("id"));
@@ -108,23 +177,25 @@ public class Stat {
                 va.add(categorie);
             }
         } catch (Exception e) {
+            
             e.printStackTrace();
             throw e;
         } finally {
-            connection.close();
-            return va;
-        }
+           resultSet.close();
+           preparedStatement.close();
+           
+        } return va;
     }
 
-    public static ArrayList<Categorie> getChiffreAffaireParCategorie() throws SQLException {
+    public static ArrayList<Categorie> getChiffreAffaireParCategorie(Connection con) throws SQLException {
         Categorie valiny = null;
         Connection connection = null;
         ArrayList<Categorie> va = new ArrayList<Categorie>();
         try {
-            connection = Connexion.getConn();
+      
             String sql = " select case when sum(commission)>0 then sum(commission) else 0 end prixmise ,ct.id From categorie ct full join"
                     + " chiffreEnchere ce on ce.categorieid=ct.id group by ct.id order by prixmise desc";
-            PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
+            PreparedStatement preparedStatement =con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Categorie categorie = new Categorie();
@@ -137,22 +208,22 @@ public class Stat {
             e.printStackTrace();
             throw e;
         } finally {
-            connection.close();
+          
             return va;
         }
     }
-public static ArrayList<Users> getParticipantLePlusRentable() throws SQLException {
+
+    public static ArrayList<Users> getParticipantLePlusRentable(Connection con) throws SQLException {
         Categorie valiny = null;
-        Connection connection = null;
         ArrayList<Users> va = new ArrayList<Users>();
         try {
-            connection = Connexion.getConn();
+
             String sql = " select sum(commission),id from "
                     + " (select us.id ,case when commission>0 then"
                     + " commission else 0 end commission From users "
                     + "us full join chiffreEnchere ce on us.id=participant)"
                     + " as foo group by id order by sum desc";
-            PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Users categorie = new Users();
@@ -165,7 +236,6 @@ public static ArrayList<Users> getParticipantLePlusRentable() throws SQLExceptio
             e.printStackTrace();
             throw e;
         } finally {
-            connection.close();
             return va;
         }
     }

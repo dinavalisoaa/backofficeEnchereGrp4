@@ -10,16 +10,16 @@
   <title>Dashio - Bootstrap Admin Template</title>
 
   <!-- Favicons -->
-  <link href="img/favicon.png" rel="icon">
-  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="../img/favicon.png" rel="icon">
+  <link href="../img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
-  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!--external css-->
-  <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
   <!-- Custom styles for this template -->
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/style-responsive.css" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+  <link href="../css/style-responsive.css" rel="stylesheet">
   
   <!-- =======================================================
     Template Name: Dashio
@@ -36,7 +36,7 @@
   <div id="login-page">
     <div class="container">
       <form class="form-login" action="actionlogin" method="get">
-        <h2 class="form-login-heading">Login AdmiSn</h2>
+        <h2 class="form-login-heading">Login Adn</h2>
         <div class="login-wrap">
           <input type="text" name="login"  class="form-control" value="root"placeholder="User ID" autofocus>
           <br>
@@ -59,7 +59,7 @@
                 <h4 class="modal-title">Forgot Password ?</h4>
               </div>
               <div class="modal-body">
-                <p>Enter your e-mail address below to reset your password.</p>
+                <p>Enter your e-mails address below to reset your password.</p>
                 <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
               </div><form >
             <label>Login</label>

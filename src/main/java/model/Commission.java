@@ -35,7 +35,13 @@ public class Commission extends ObjectBDD {
     public double getTaux() {
         return taux;
     }
-
+    
+     public Commission getCommission() throws Exception {
+//    ArrayList<Users>vao=()
+Commission com=new Commission();
+com.setId(this.id);
+        return ((Commission) com.select(null).get(0));
+    }
     public void setTaux(double taux) {
         this.taux = taux;
     }

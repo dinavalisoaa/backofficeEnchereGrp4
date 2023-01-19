@@ -161,7 +161,7 @@ public class ObjectBDD {
                     
 //                
                     if (att_f == null && ats==null) {
-                    if (method[i].invoke(objet) != null && method[i].invoke(objet).equals(-1) == false) {
+                    if (method[i].invoke(objet) != null && method[i].invoke(objet).equals(-1) == false && method[i].invoke(objet).equals(-1.0) == false) {
                         if (attri[i].toUpperCase().equals(primary.toUpperCase())) {
                             //	exp=exp+attri[i]+"='"+method[i].invoke(objet)+"',";
                             indice = i;
@@ -359,8 +359,8 @@ public class ObjectBDD {
                                 miset.invoke(nouveau, ob);
                             } else if (fiel[u].getType().getSimpleName().equals("int")) {
                                 Object ob = res.getInt(fiel[u].getName());
-//                            System.out.println(fiel[u].getName());
-                                Method miset = objet.getClass().getMethod("set" + st2, types);
+//                          
+                                Method miset = objet.getClass().getMethod("set" + st2,fiel[u].getType());
                                 miset.invoke(nouveau, ob);
                             } //                            
                             else if (fiel[u].getType().getSimpleName().equals("Integer")) {

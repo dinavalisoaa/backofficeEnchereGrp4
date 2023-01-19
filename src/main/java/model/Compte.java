@@ -53,7 +53,12 @@ public class Compte extends ObjectBDD {
 
     public void insert(Connection con) throws Exception {
         ObjectBDD bss=this.getLastObject();
-        this.setMontant(((Compte)bss).getMontant() + this.montant);
+        double montant=0;
+         ArrayList<Compte> li = selectBySQL(" select  *  from compte order by id desc limit 1", null);
+         if(li.size()>0){
+         montant=(li.get(0)).getMontant();
+         }
+        this.setMontant(montant + this.montant);
         super.insert(null);
     }
     

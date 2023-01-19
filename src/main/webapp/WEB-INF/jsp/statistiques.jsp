@@ -10,16 +10,16 @@
         <title>Dashio - Bootstrap Admin Template</title>
 
         <!-- Favicons -->
-        <link href="img/favicon.png" rel="icon">
-        <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+        <link href="../img/favicon.png" rel="icon">
+        <link href="../img/apple-touch-icon.png" rel="apple-touch-icon">
 
         <!-- Bootstrap core CSS -->
-        <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!--external css-->
-        <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
         <!-- Custom styles for this template -->
-        <link href="css/style.css" rel="stylesheet">
-        <link href="css/style-responsive.css" rel="stylesheet">
+        <link href="../css/style.css" rel="stylesheet">
+        <link href="../css/style-responsive.css" rel="stylesheet">
 
         <!-- =======================================================
           Template Name: Dashio
@@ -90,10 +90,10 @@
                              <div class="content-panel">
                                 <div class="showback">
                                     <a href="classementCategorie">   <button type="button" class="btn btn-info">Classement des Categories</button></a>
-                                    <a href="categorie">   <button type="button" class="btn btn-primary">Categorie</button></a>
-                                    <a href="demandes">   <button type="button" class="btn btn-danger">Demande de rechargement</button></a>
-                                    <a href="commissions">   <button type="button" class="btn btn-warning">Commission</button></a>
-                                    <a href="statistiques">   <button type="button" class="btn btn-success">Statistiques</button></a>
+                                    <a href="allcategorie">   <button type="button" class="btn btn-primary">Categorie</button></a>
+                                    <a href="alldemandes">   <button type="button" class="btn btn-danger">Demande de rechargement</button></a>
+                                    <a href="allcommissions">   <button type="button" class="btn btn-warning">Commission</button></a>
+                                    <a href="allstatistiques">   <button type="button" class="btn btn-success">Statistiques</button></a>
 
                                 </div>
                             </div>
@@ -210,13 +210,13 @@
             <!--footer end-->
         </section>
         <!-- js placed at the end of the document so the pages load faster -->
-        <script src="lib/jquery/jquery.min.js"></script>
-        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-        <script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
-        <script src="lib/jquery.scrollTo.min.js"></script>
-        <script src="lib/jquery.nicescroll.js" type="text/javascript"></script>
+        <script src="../lib/jquery/jquery.min.js"></script>
+        <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
+        <script class="include" type="text/javascript" src="../lib/jquery.dcjqaccordion.2.7.js"></script>
+        <script src="../lib/jquery.scrollTo.min.js"></script>
+        <script src="../lib/jquery.nicescroll.js" type="text/javascript"></script>
         <!--common script for all pages-->
-        <script src="lib/common-scripts.js"></script>
+        <script src="../lib/common-scripts.js"></script>
         <!--script for this page-->
 
     </body>

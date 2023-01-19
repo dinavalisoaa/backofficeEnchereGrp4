@@ -12,16 +12,16 @@
         <title>Dashio - Bootstrap Admin Template</title>
 
         <!-- Favicons -->
-        <link href="img/favicon.png" rel="icon">
-        <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+        <link href="../img/favicon.png" rel="icon">
+        <link href="../img/apple-touch-icon.png" rel="apple-touch-icon">
 
         <!-- Bootstrap core CSS -->
-        <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!--external css-->
-        <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
         <!-- Custom styles for this template -->
-        <link href="css/style.css" rel="stylesheet">
-        <link href="css/style-responsive.css" rel="stylesheet">
+        <link href="../css/style.css" rel="stylesheet">
+        <link href="../css/style-responsive.css" rel="stylesheet">
 
         <!-- =======================================================
           Template Name: Dashio
@@ -32,6 +32,8 @@
     </head>
     <%%>
     <% ArrayList<Categorie>cor=(ArrayList<Categorie>)request.getAttribute("classement");%>
+    <% ArrayList<Categorie>ccat=(ArrayList<Categorie>)request.getAttribute("chiffrecategorie");%>
+
 
     <body>
         <section id="container">
@@ -131,7 +133,7 @@
                                 </li>
                                 <li>
                                     <a href="index.html#">
-                                        <span class="photo"><img alt="avatar" src="img/ui-zac.jpg"></span>
+                                        <span class="photo"><img alt="avatar" src="../img/ui-zac.jpg"></span>
                                         <span class="subject">
                                             <span class="from">Zac Snider</span>
                                             <span class="time">Just now</span>
@@ -143,7 +145,7 @@
                                 </li>
                                 <li>
                                     <a href="index.html#">
-                                        <span class="photo"><img alt="avatar" src="img/ui-divya.jpg"></span>
+                                        <span class="photo"><img alt="avatar" src="../img/ui-divya.jpg"></span>
                                         <span class="subject">
                                             <span class="from">Divya Manian</span>
                                             <span class="time">40 mins.</span>
@@ -155,7 +157,7 @@
                                 </li>
                                 <li>
                                     <a href="index.html#">
-                                        <span class="photo"><img alt="avatar" src="img/ui-danro.jpg"></span>
+                                        <span class="photo"><img alt="avatar" src="../img/ui-danro.jpg"></span>
                                         <span class="subject">
                                             <span class="from">Dan Rogers</span>
                                             <span class="time">2 hrs.</span>
@@ -167,7 +169,7 @@
                                 </li>
                                 <li>
                                     <a href="index.html#">
-                                        <span class="photo"><img alt="avatar" src="img/ui-sherman.jpg"></span>
+                                        <span class="photo"><img alt="avatar" src="../img/ui-sherman.jpg"></span>
                                         <span class="subject">
                                             <span class="from">Dj Sherman</span>
                                             <span class="time">4 hrs.</span>
@@ -270,60 +272,115 @@
                 MAIN CONTENT
                 *********************************************************************************************************************************************************** -->
             <!--main content start-->
-            <section id="main-content">
-                <section class="wrapper">
-                    <h3><i class="fa fa-angle-right"></i> Chartjs Charts</h3>
-                    <div class="content-panel">
-                        <div class="showback">
-                            <a href="classementCategorie">   <button type="button" class="btn btn-info">Classement des Categories</button></a>
-                            <a href="categorie">   <button type="button" class="btn btn-primary">Categorie</button></a>
-                            <a href="demandes">   <button type="button" class="btn btn-danger">Demande de rechargement</button></a>
-                            <a href="commissions">   <button type="button" class="btn btn-warning">Commission</button></a>
-                            <a href="statistiques">   <button type="button" class="btn btn-success">Statistiques</button></a>
+            < <section id="main-content">
+                <section class="wrapper site-min-height">
+
+                    <h3><i class="fa fa-angle-right"></i> Morris Charts</h3>
+                    <div class="showback">
+                        <a href="classementCategorie">   <button type="button" class="btn btn-info">Classement des Categories</button></a>
+                        <a href="classementUsers">   <button type="button" class="btn btn-info">Classement des Utilisateur</button></a>
+
+                        <a href="categorie">   <button type="button" class="btn btn-primary">Categorie</button></a>
+                        <a href="demandes">   <button type="button" class="btn btn-danger">Demande de rechargement</button></a>
+                        <a href="commissions">   <button type="button" class="btn btn-warning">Commission</button></a>
+                        <a href="statistiques">   <button type="button" class="btn btn-success">Statistiques</button></a>
+                    </div>
+                    <!-- page start-->
+                    <div id="morris">
+                        <div class="row mt">
+                            <div class="col-lg-6">
+                                <div class="content-panel">
+                                    <h4><i class="fa fa-angle-right"></i>Centre d'interet des Utilisatuer</h4>
+                                    <div class="card-body">
+                                        <canvas id="barChart"></canvas>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="content-panel">
+                                    <h4><i class="fa fa-angle-right"></i>Chiffre d'affaire</h4>
+                                    <div class="panel-body">
+                                        <table style="width:80%" border="1" class="table table-striped table-responsive-md">
+                                            <thead>
+                                                <tr>
+                                                    <th>Designation</th>          
+                                                    <th>Chiffre</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Chiffre Journalier</td>
+                                                    <td><%=request.getAttribute("chiffrejour")%>AR</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiffre Mensuel</td>
+                                                    <td><%=request.getAttribute("chiffremois") %>AR</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chiffre Annuel</td>
+                                                    <td><%=request.getAttribute("chiffrean") %>AR</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt">
+                            <div class="col-lg-6">
+                                <div class="content-panel">
+                                    <h4><i class="fa fa-angle-right"></i> Rentabilite par categorie</h4>
+                                    <div class="panel-body">
+                                        <table style="width:80%" border="1" class="table table-striped table-responsive-md">
+                                            <thead>
+                                                <tr>
+                                                    <th>Categorie</th>          
+                                                    <th>Chiffre</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for(int i=0;i<ccat.size();i++){ %>
+                                                <tr>
+                                                    <td><%=ccat.get(i).getNom()%></td>
+                                                    <td><%=ccat.get(i).getChiffreAffaire()%>AR</td>
+
+                                                </tr>
+                                                <% } %>
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                            </div><div class="col-lg-6">
+                                
+                            </div>
                         </div>
                     </div>
-                    <div class="main-panel">
-                        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-              
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Centre d'interet des Utilisatuer</h4>
-                  <canvas id="barChart"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="row">
-          </div>
-                    </div>
-
+                    <!-- page end-->
                 </section>
             </section>
             <!--footer end-->
         </section>
-        <script src="js/js/vendor.bundle.base.js"></script>
-        <script src="js/js.chart.js/Chart.min.js"></script>
+        <script src="../js/js/vendor.bundle.base.js"></script>
+        <script src="../js/js.chart.js/Chart.min.js"></script>
         <!-- End plugin js for this page -->
         <!-- inject:js -->
-        <script src="js/off-canvas.js"></script>
-        <script src="js/hoverable-collapse.js"></script>
-        <script src="js/template.js"></script>
-        <script src="js/settings.js"></script>
-        <script src="js/todolist.js"></script>
+        <script src="../js/off-canvas.js"></script>
+        <script src="../js/hoverable-collapse.js"></script>
+        <script src="../js/template.js"></script>
+        <script src="../js/settings.js"></script>
+        <script src="../js/todolist.js"></script>
         <!-- endinject -->
         <!-- Custom js for this page-->
-        <!--<script src="js/chart.js"></script>-->
+        <!--<script src="../js/chart.js"></script>-->
         <!-- End custom js for this page-->
-        <script src="lib/chartjs-conf.js"></script>
+        <script src="../lib/chartjs-conf.js"></script>
     </body>
     <script>
 
@@ -416,22 +473,21 @@
         <%} %>
         ],
                 backgroundColor: [
-                      
+
         <% for(int i=0;i<cor.size();i++){ %>
         <% if(i%2==0){ %>
-                        'rgba(255, 99, 132, 0.5)',
+                'rgba(255, 99, 132, 0.5)',
         <%  %>
-                        'rgba(75, 192, 192, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
         <% } %>
         <%} %>
-                        ],
-                       
-                }],
+                ],
+        }],
                 // These labels appear in the legend and in the tooltips when hovering different arcs
                 labels: [
-                        <% for(int i=0;i<cor.size();i++){ %>
- "<%=cor.get(i).getNom()%>",
-                      <% } %>
+        <% for(int i=0;i<cor.size();i++){ %>
+                "<%=cor.get(i).getNom()%>",
+        <% } %>
                 ]
         };
         var doughnutPieOptions = {

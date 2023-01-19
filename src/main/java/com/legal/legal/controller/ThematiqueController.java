@@ -1,3 +1,5 @@
+package com.legal.legal.controller;
+
 //package com.legal.legal.controller;
 //
 //import javax.servlet.http.HttpServletRequest;

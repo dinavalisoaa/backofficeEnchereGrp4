@@ -1,11 +1,15 @@
 package com.legal.legal.controller;
 
+import BddObject.Connexion;
 import java.nio.file.Paths;
+import java.sql.Connection;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
-import model.Admin;
+import model.*;
 import model.Categorie;
+import model.Commission;
 import model.DemandeRechargement;
 import model.Parametrage;
 import model.Stat;
@@ -27,13 +31,16 @@ import org.springframework.web.util.HtmlUtils;
 //import com.legal.legal.repository.ThematiqueRepository;
 //import com.legal.legal.repository.TypeRepository;
 @Controller
+@RequestMapping("/backoffice")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class TypeController {
 
-    @RequestMapping("/")
-    public String AsjoutTheme(HttpServletRequest request, Model model) {
+    @GetMapping("/")
+    public String AsjoutTheme(HttpServletRequest request, Model model) throws Exception {
         model.addAttribute("content", "type");
         model.addAttribute("contentpath", "View/type");
+//          model.addAttribute("categorie", Categorie.categories());
+//        return "categories";
         return "index";
     }
 
@@ -47,7 +54,7 @@ public class TypeController {
     }
 
 //     
-    @RequestMapping("/categorie")
+    @RequestMapping("/allcategorie")
     public String AjoutThesme(HttpServletRequest request, Model model) throws Exception {
         model.addAttribute("categorie", Categorie.categories());
         return "categories";
@@ -59,48 +66,81 @@ public class TypeController {
         gor.setNom(request.getParameter("nom"));
 //        gor.setId(Integer.parseInt(request.getParameter("id").toString()));
         gor.insert(null);
-        return "redirect:categorie";
+        return "redirect:allcategorie";
     }
-
+    @RequestMapping("/allcommissions")
+    public String allCom(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("commission", new Commission().selectBySQL("select *from commission order by daty desc",null));
+        return "commission";
+    }
+ @RequestMapping("/addCommission")
+    public String addCOm(HttpServletRequest request, Model model) throws Exception {
+        Commission com=new Commission();
+        com.setTaux(Double.valueOf(request.getParameter("taux")));
+        model.addAttribute("commission", new Commission().select(null));
+        return "redirect:allcommission";
+    }
     @RequestMapping("/delCat")
     public String delCat(HttpServletRequest request, Model model) throws Exception {
         Categorie gor = new Categorie();
 //        gor.setId(request.getParameter("id"));
         gor.setId(Integer.parseInt(request.getParameter("id").toString()));
         gor.delete("id", null);
-        return "redirect:categorie";
+        return "redirect:allcategorie";
     }
 
-    @RequestMapping("/parametrages")
+    @GetMapping("/allparametrages")
     public String AsjoutThesme(HttpServletRequest request, Model model) throws Exception {
         model.addAttribute("parametrages", new Parametrage().parametrages());
         return "parametrages";
     }
 
-    @RequestMapping("/statistiques")
+    @RequestMapping("/allstatistiques")
     public String statistiques(HttpServletRequest request, Model model) throws Exception {
         model.addAttribute("parametrages", new Parametrage().parametrages());
         return "statistiques";
     }
+
     @RequestMapping("/classementCategorie")
     public String classementCategorie(HttpServletRequest request, Model model) throws Exception {
-        model.addAttribute("classement",Stat.categorieLePlusAimes());
+        Connection con = Connexion.getConn();
+        model.addAttribute("classement", Stat.categorieLePlusAimes(con));
+        model.addAttribute("chiffremois", Stat.getChiffreAffaireMois(con));
+        model.addAttribute("chiffrejour", Stat.getChiffreAffaireJour(con));
+        model.addAttribute("chiffrean", Stat.getChiffreAffaireAnnuel(con));
+        model.addAttribute("chiffrecategorie", Stat.getChiffreAffaireParCategorie(con));
+        con.close();
+//        ArrayList<Categorie> getChiffreAffaireParCategorie()
+//        model.addAttribute("chiffremois", Stat.getChiffreAffaireMois());
         return "classementCategorie";
     }
-    
+
+    @RequestMapping("/classementUsers")
+    public String classementUsers(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("activiteUsers", new Stat().activiteUsers());
+        model.addAttribute("rentableUsers", new Stat().htmlStatUser());
+
+        return "classementUsers";
+    }
+
     @RequestMapping("/classementUtilisateur")
     public String classementUtilisateur(HttpServletRequest request, Model model) throws Exception {
-        model.addAttribute("classement",new Stat().activiteUsers());
+        model.addAttribute("classement", new Stat().activiteUsers());
         return "classementUtilisateur";
     }
-    
 
-    @RequestMapping("/demandes")
+    @RequestMapping("/allcommission")
+    public String commission(HttpServletRequest request, Model model) throws Exception {
+        model.addAttribute("commission", new Commission().select(null));
+        return "commission";
+    }
+
+    @RequestMapping("/alldemandes")
     public String demandes(HttpServletRequest request, Model model) throws Exception {
         DemandeRechargement dems = new DemandeRechargement();
         if (request.getParameter("etat") != null) {
             int ref = Integer.valueOf(request.getParameter("etat").toString());
-            {
+            if (ref != -2) {
                 dems.setState(ref);
             }
             if (ref == 0) {
@@ -129,30 +169,37 @@ public class TypeController {
         gorie.setId(Integer.parseInt(request.getParameter("id").toString()));
         gorie.update("Id", null);
         model.addAttribute("parametrages", new Parametrage().parametrages());
-        return "redirect:parametrages";
+        return "redirect:allparametrages";
     }
 
     @RequestMapping("/validerdemande")
     public String valider(HttpServletRequest request, Model model) throws Exception {
         DemandeRechargement dmd = new DemandeRechargement();
-//        dmd.setMontant(0);
         dmd.setId(Integer.parseInt(request.getParameter("id").toString()));
-        dmd.setState(0);
+//        DemandeRechargement vaovao = dmd.getDemandeRechargement();
+//        dmd.setMontant(dmd.getMontant());
+        dmd.setState(1);
         dmd.setDateValidation(LocalDate.now().toString());
+        Compte comp = new Compte();
+        comp.setMontant(dmd.getDemandeRechargement().getMontant());
+        comp.setUsersId(dmd.getDemandeRechargement().getUsersId());
+        comp.insert(null);
         dmd.update("Id", null);
         model.addAttribute("parametrages", new Parametrage().parametrages());
-        return "redirect:demandes";
+        return "redirect:alldemandes";
     }
 
     @RequestMapping("/refuserdemande")
     public String refuser(HttpServletRequest request, Model model) throws Exception {
         DemandeRechargement dmd = new DemandeRechargement();
         dmd.setId(Integer.parseInt(request.getParameter("id").toString()));
-        dmd.setState(11);
+//        DemandeRechargement vaovao = dmd.getDemandeRechargement();
+//        dmd.setMontant(dmd.getMontant());
+        dmd.setState(-2);
         dmd.setDateValidation(LocalDate.now().toString());
         dmd.update("Id", null);
         model.addAttribute("parametrages", new Parametrage().parametrages());
-        return "redirect:demandes";
+        return "redirect:alldemandes";
     }
 
     @GetMapping("/actionlogin")

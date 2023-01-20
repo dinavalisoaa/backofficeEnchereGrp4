@@ -74,12 +74,14 @@ public class TypeController {
         model.addAttribute("commission", new Commission().selectBySQL("select *from commission order by daty desc", null));
         return "commission";
     }
-
+    
     @RequestMapping("/addCommission")
     public String addCOm(HttpServletRequest request, Model model) throws Exception {
         Commission com = new Commission();
         com.setTaux(Double.valueOf(request.getParameter("taux")));
+        com.insert(null);
         model.addAttribute("commission", new Commission().select(null));
+        
         return "redirect:allcommission";
     }
 

@@ -110,7 +110,8 @@
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                             <h4 class="modal-title">Mis a jour des commissions</h4>
                                         </div>
-                                        <div class="modal-body">                  <form action="addCommission" method="get">
+                                        <div class="modal-body">                  
+                                            <form action="addCommission" method="get">
 
                                                 <p>TAUX DE COMMISSION</p>
                                                 <input type="text" name="taux"value="<%=new Commission().getCurrentId().getTaux()%>" placeholder="nom" class="form-control placeholder-no-fix">
@@ -134,7 +135,7 @@
                         <div class="row mt">
                             <div class="col-md-12">
                                 <div class="content-panel">
-                                    
+                                    <h2>Taux en cours:<%=new Commission().getCurrentId().getTaux()%>%</h2>
                                         <table style="width:80%" border="1" class="table table-striped table-responsive-md">
                                             <thead>
                                                 <tr>
@@ -145,7 +146,7 @@
                                             </thead>
                                             <tbody>
                                                 <% for(int i=0;i<cor.size();i++){%>
-                                                <% if(i==0){%>
+                                                <% if(cor.get(i).getId()==cor.get(i).getCurrentId().getId()){%>
                                                 <tr style="background-color: antiquewhite">
                                                     <% } %>
                                                                                                         <th></th>

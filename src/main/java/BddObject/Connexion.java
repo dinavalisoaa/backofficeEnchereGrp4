@@ -15,8 +15,8 @@ public class Connexion {
 //        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             Class.forName("org.postgresql.Driver");
 //        connectionSQL = DriverManager.getConnection(connectionUrl);
-//                    connectionSQL = DriverManager.getConnection("jdbc:postgresql://localhost:5432/enchere", "dina", "dina");
-                    connectionSQL = DriverManager.getConnection("jdbc:postgresql://postgresql-anjara.alwaysdata.net:5432/anjara_1", "anjara", "4004675004");
+                    connectionSQL = DriverManager.getConnection("jdbc:postgresql://localhost:5432/enchere", "dina", "dina");
+//                    connectionSQL = DriverManager.getConnection("jdbc:postgresql://postgresql-anjara.alwaysdata.net:5432/anjara_1", "anjara", "4004675004");
 
         System.out.println("Driver O.K.");
         } catch (Exception e) {

@@ -40,7 +40,10 @@ public class EnchereMoveCoteUtilisateur {
         enc.setId(id);
         enc = enc.getEnchere();
         if (enc.getUsersId() == usersId) {
-            throw new Exception("Vous ne pouvez pas participer a votre propre enchere");
+            texte = gson.toJson(new Message(new Fail("500", "Vous ne pouvez pas participer a votre propre enchere")));
+
+            return texte;
+//            throw new Exception("Vous ne pouvez pas participer a votre propre enchere");
         }
         moves.setUsersId(usersId);
         moves.setPrixMise(prixMise);

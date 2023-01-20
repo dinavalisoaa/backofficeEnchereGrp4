@@ -42,21 +42,7 @@ public class ConnectMongo {
         }
         return Connexions.getMongoConnection().getName() ;
     }
-     @GetMapping("/users/{id}/comptes")
-    String getUsers(@PathVariable int id) throws Exception {
-        Gson gson = new Gson();
-        HashMap _val_ = new HashMap<String, Object>();
-        Compte vao = new Compte();
-//        vao.setLogin(login);
-//        vao.setMdp(mdp);
-//        vao.setNom(nom);
-        vao.setUsersId(id);
-//        vao.insert(null);
-        _val_.put("data", vao.select(null));
-//        String texte = gson.toJson(new Users().select(null));
-        return gson.toJson(_val_);
-    }
-//
+
 //    //update un encheres adjuger
 //    @PutMapping("/users/{id}/encheres/{idc}/ajd")
 //    String updateAdj(@RequestParam double prixMin,

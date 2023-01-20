@@ -67,7 +67,7 @@ public class UsersController {
     
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
     @CrossOrigin
-    HashMap<String, Object> login(@RequestParam String logins, @RequestParam String pwds) throws Exception {
+    public String login(@RequestParam String logins, @RequestParam String pwds) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
         Users zateur = new Users();
         zateur.setLogin(logins);
@@ -78,7 +78,7 @@ public class UsersController {
         String json = "";
         if (id == -1) {
             _val_.put("datas", (new Fail("Login Error", "500")));
-            return _val_;
+            return gson.toJson(_val_);
         }
         zateur.setId(id);
         try {
@@ -87,7 +87,32 @@ public class UsersController {
         } catch (Exception xc) {
             throw xc;
         }
-        return _val_;
+        return gson.toJson(_val_);
+    }
+    @RequestMapping(value = "/inscription", method = RequestMethod.POST, produces = "application/json")
+    @CrossOrigin
+    String logon(@RequestParam String nom,@RequestParam String prenom,@RequestParam String dtn,@RequestParam String logins, @RequestParam String pwds) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+        Users zateur = new Users();
+        zateur.setNom(nom);
+        zateur.setPrenom(prenom);
+        zateur.setDtn(dtn);
+        zateur.setLogin(logins);
+        zateur.setMdp(pwds);
+        zateur.insert(null);
+        Gson gson = new Gson();
+        int id = zateur.getLoginId();
+        System.err.println(id);
+        String json = "";
+   
+        zateur.setId(id);
+        try {
+            String oi =new TokenHandler().CreerToken(id);
+            _val_.put("datas", new Success(id, oi));
+        } catch (Exception xc) {
+            throw xc;
+        }
+        return gson.toJson(_val_);
     }
     
     @RequestMapping(value = "/checkTokens", method = RequestMethod.GET, produces = "application/json")

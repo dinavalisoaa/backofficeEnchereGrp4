@@ -27,6 +27,7 @@ public class Users extends ObjectBDD {
     String login;
     String mdp;
     String prenom;
+    String dtn;
     @Ignore
     private int nbEnchereFait;
     @Ignore
@@ -40,6 +41,14 @@ public class Users extends ObjectBDD {
 
     public double getRentabilite() {
         return rentabilite;
+    }
+
+    public String getDtn() {
+        return dtn;
+    }
+
+    public void setDtn(String dtn) {
+        this.dtn = dtn;
     }
 
     public void setRentabilite(double rentabilite) {
@@ -68,7 +77,11 @@ public class Users extends ObjectBDD {
     public double getCurrentMoney() throws Exception {
         Compte cpt = new Compte();
         cpt.setUsersId(id);
-        double montant = ((Compte) cpt.getLastObject()).getMontant();
+        double montant = 0;
+        try {
+            montant = ((Compte) cpt.getLastObject()).getMontant();
+        } catch (Exception e) {
+        }
         return montant;
     }
 

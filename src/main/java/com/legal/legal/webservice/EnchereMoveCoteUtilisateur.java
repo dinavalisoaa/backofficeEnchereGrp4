@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.*;
 import com.google.gson.*;
 import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,22 +27,59 @@ public class EnchereMoveCoteUtilisateur {
 
     @PostMapping("encheres/{id}/enchereMoves")
     String Create(@RequestParam double prixMise,
-            @PathVariable int id, @RequestParam int usersId) throws Exception {
+            @PathVariable int id, @RequestParam int usersId,@RequestHeader String token) throws Exception {
+//        if(/)
+        TokenHandler tokens=new TokenHandler().ToToken(token);
         Gson gson = new Gson();
+        
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
-         EnchereMove moves = new EnchereMove();
-            moves.setEnchereId(id);
-            moves.setUsersId(usersId);
+        EnchereMove moves = new EnchereMove();
+        moves.setEnchereId(id);
+        moves.setUsersId(usersId);
 //            if(moves.select(null).size()>0){
 //            
 //            }
         try {
+            Enchere enh = new Enchere();
+           
+            enh.setId(id);
+            int idGagnantTaloha = enh.getEnchereMovesGagnantId();
             EnchereMove move = new EnchereMove();
+            move.setId( enh.getEnchereMovesGagnantId());
+            move.setState(1);
+            move.update("id",null);
+            move=new EnchereMove();
             move.setEnchereId(id);
             move.setPrixMise(prixMise);
             move.setUsersId(usersId);
             move.insert(null);
-            texte = gson.toJson(new Message(new Success(((EnchereMove) move.getLastObject()).getId(), "Success")));
+
+            int idGagnant = enh.getEnchereMovesGagnantId();
+            if (move.getLastID() == idGagnant) {
+                EnchereMove io = new EnchereMove();
+                io.setId(move.getLastID());
+                io.setState(1);
+                io.update("Id", null);
+
+                Compte cpt = new Compte();
+                cpt.setMontant(-1 * prixMise);
+                cpt.setUsersId(usersId);
+                cpt.insert(null);
+                cpt.setMontant(prixMise);
+                cpt.setState(0);
+                cpt.insert(null);
+
+                EnchereMove old = new EnchereMove();
+                old.setId(idGagnantTaloha);
+                old.setState(0);
+                old.update("Id", null);
+                cpt.setUsersId(old.getEnchereMove().getUsersId());
+                cpt.setState(1);
+                cpt.setMontant(old.getEnchereMove().getPrixMise());
+                cpt.insert(null);
+
+            }
+            texte = gson.toJson(new Message(new Success(move.getLastID(), "Success")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
 //            throw ex;

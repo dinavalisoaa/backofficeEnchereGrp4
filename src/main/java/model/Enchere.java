@@ -57,20 +57,21 @@ public class Enchere extends ObjectBDD {
         if (dateDebut != null) {
             sql += " and datedebut >" + dateDebut + "";
         }
-        if (prixMin!=-1) {
+        if (prixMin != -1) {
             sql += " and prixMin >" + prixMin + "";
         }
-        
-        if (state !=-1) {
+
+        if (state != -1) {
             sql += " and state =" + state + "";
         }
         if (dateExp != null) {
             sql += " and dateexp <" + dateExp + "";
         }
-        
-        ArrayList<Enchere>li=new Enchere().selectBySQL(sql,null);
-      return li;
+
+        ArrayList<Enchere> li = new Enchere().selectBySQL(sql, null);
+        return li;
     }
+
     public int getNbPersonne() {
         return nbPersonne;
     }
@@ -371,6 +372,36 @@ public class Enchere extends ObjectBDD {
             connection.close();
             return users;
         }
+    }
+
+    public int getEnchereMovesGagnantId() throws SQLException, Exception {
+        Users valiny = new Users();
+        EnchereMove users = new EnchereMove();
+        Connection connection = null;
+        int id = 0;
+        try {
+            connection = Connexion.getConn();
+            String sql = "select * from encheremove\n"
+                    + "where encheremove.enchereid=" + this.getId() + "\n"
+                    + "and encheremove.prixmise in(\n"
+                    + "select max(prixmise) as maximum from encheremove  \n"
+                    + "where encheremove.enchereid=" + this.getId() + "\n"
+                    + "group by enchereid\n"
+                    + ") ";
+            System.out.println(sql);
+            PreparedStatement preparedStatement =connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                id = resultSet.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            connection.close();
+        }
+        return id;
+
     }
 
     public int getEnchereVitany() throws SQLException {

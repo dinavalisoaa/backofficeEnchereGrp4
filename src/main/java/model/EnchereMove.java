@@ -96,9 +96,13 @@ public class EnchereMove extends ObjectBDD {
         us.setId(this.usersId);
         return ((Users) us.select(null).get(0));
     }
-
+  public EnchereMove getEnchereMove() throws Exception {
+        EnchereMove us = new EnchereMove();
+        us.setId(this.id);
+        return ((EnchereMove) us.select(null).get(0));
+    }
     public void setPrixMise(double prixMise) throws Exception {
-//        System.out.println(this.getUsers().getCurrentMoney());
+        System.out.println(this.getUsers().getCurrentMoney());
 //        if (prixMise > this.getUsers().getCurrentMoney()) {
 //            throw new Exception("Solde inferieur");
 //        } else {

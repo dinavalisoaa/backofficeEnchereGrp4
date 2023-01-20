@@ -20,6 +20,7 @@ public class Compte extends ObjectBDD {
     private double montant = -1;
     private int usersId;
     private String dateReload;
+    int state=-1;
     @Ignore
     Users user;
 
@@ -29,6 +30,14 @@ public class Compte extends ObjectBDD {
 
     public void setUser(Users user) {
         this.user = user;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
     
     
@@ -54,7 +63,7 @@ public class Compte extends ObjectBDD {
     public void insert(Connection con) throws Exception {
         ObjectBDD bss=this.getLastObject();
         double montant=0;
-         ArrayList<Compte> li = selectBySQL(" select  *  from compte order by id desc limit 1", null);
+         ArrayList<Compte> li = selectBySQL(" select  *  from compte where state=1 order by id desc limit 1", null);
          if(li.size()>0){
          montant=(li.get(0)).getMontant();
          }

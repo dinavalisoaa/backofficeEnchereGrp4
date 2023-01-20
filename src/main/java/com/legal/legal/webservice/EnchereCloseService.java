@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import model.*;
 import com.google.gson.*;
+import java.time.LocalDate;
 import java.util.HashMap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,41 +22,43 @@ import utils.Success;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @RestController
 @CrossOrigin
-public class CompteService {
+public class EnchereCloseService {
 //creer son propres en Encheres
 
-    @PostMapping("/users/{id}/comptes")
-    String Create(@RequestParam double montant,
+    @PostMapping("/enchereClose/{id}")
+    String Create(
             @PathVariable int id) throws Exception {
         Gson gson = new Gson();
-        String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
-
+        EnchereClose en=new EnchereClose();
+        en.setEnchereId(id);
+        en.setDateClose(LocalDate.now().toString().replace("T"," "));
+//    new HistoriqueRepository().InsertHistorique(en);
+        String texte = "";// gon.toJson(new Message(new Success(idKilo, "Success")));
         try {
-            Compte cpt = new Compte();
-            cpt.setUsersId(id);
-            cpt.setMontant(montant);
-            cpt.insert(null);
-            texte = gson.toJson(new Message(new Success(cpt.getLastID(), "Success")));
+//            cpt.setMontant(montant);
+//            cpt.insert(null);
+            texte = gson.toJson(new Message(new Success(id, "Success")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
             throw ex;
         }
         return texte;
     }
-     @GetMapping("/users/{id}/comptes")
-    String getUsers(@PathVariable int id) throws Exception {
-        Gson gson = new Gson();
-        HashMap _val_ = new HashMap<String, Object>();
-        Compte vao = new Compte();
-//        vao.setLogin(login);
-//        vao.setMdp(mdp);
-//        vao.setNom(nom);
-        vao.setUsersId(id);
-//        vao.insert(null);
-        _val_.put("data", vao.select(null));
-//        String texte = gson.toJson(new Users().select(null));
-        return gson.toJson(_val_);
-    }
+//    
+//     @GetMapping("/users/{id}/comptes")
+//    String getUsers(@PathVariable int id) throws Exception {
+//        Gson gson = new Gson();
+//        HashMap _val_ = new HashMap<String, Object>();
+//        Compte vao = new Compte();
+////        vao.setLogin(login);
+////        vao.setMdp(mdp);
+////        vao.setNom(nom);
+//        vao.setUsersId(id);
+////        vao.insert(null);
+//        _val_.put("data", vao.select(null));
+////        String texte = gson.toJson(new Users().select(null));
+//        return gson.toJson(_val_);
+//    }
 //
 //    //update un encheres adjuger
 //    @PutMapping("/users/{id}/encheres/{idc}/ajd")

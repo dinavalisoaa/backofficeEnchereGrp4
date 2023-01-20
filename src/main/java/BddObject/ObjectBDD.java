@@ -543,7 +543,7 @@ public class ObjectBDD {
                             } else if (fiel[u].getType().getSimpleName().equals("int")) {
                                 Object ob = res.getInt(fiel[u].getName());
 //                            System.out.println(fiel[u].getName());
-                                Method miset = objet.getClass().getMethod("set" + st2, types);
+                                Method miset = objet.getClass().getMethod("set" + st2,  fiel[u].getType());
                                 miset.invoke(nouveau, ob);
                             } //                            
                             else if (fiel[u].getType().getSimpleName().equals("Integer")) {

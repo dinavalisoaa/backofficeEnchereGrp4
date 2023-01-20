@@ -21,10 +21,10 @@ import utils.Success;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @RestController
 @CrossOrigin
-public class CompteService {
+public class ConnectMongo {
 //creer son propres en Encheres
 
-    @PostMapping("/users/{id}/comptes")
+    @GetMapping("mongo/")
     String Create(@RequestParam double montant,
             @PathVariable int id) throws Exception {
         Gson gson = new Gson();
@@ -40,7 +40,7 @@ public class CompteService {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
             throw ex;
         }
-        return texte;
+        return Connexions.getMongoConnection().getName() ;
     }
      @GetMapping("/users/{id}/comptes")
     String getUsers(@PathVariable int id) throws Exception {

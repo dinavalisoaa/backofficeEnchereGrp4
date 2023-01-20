@@ -38,7 +38,7 @@ public class EnchereMove extends ObjectBDD {
     public void setCommision(Commission commision) {
         this.commision = commision;
     }
-    
+
     public int getCommissionId() {
         return commissionId;
     }
@@ -98,12 +98,13 @@ public class EnchereMove extends ObjectBDD {
         us.setId(this.usersId);
         return ((Users) us.select(null).get(0));
     }
-  public EnchereMove getEnchereMove() throws Exception {
+
+    public EnchereMove getEnchereMove() throws Exception {
         EnchereMove us = new EnchereMove();
         us.setId(this.id);
         return ((EnchereMove) us.select(null).get(0));
     }
-  
+
     public static void debite(EnchereMove en) throws Exception {
         if (en.getState() == 0) {
             Compte iray = new Compte();
@@ -128,18 +129,18 @@ public class EnchereMove extends ObjectBDD {
         vaov.update("id", null);
     }
 
-    public  EnchereMove lastMove(Connection con) throws Exception {
+    public EnchereMove lastMove(Connection con) throws Exception {
         EnchereMove us = new EnchereMove();
-      ArrayList<EnchereMove> li=us.selectBySQL("select *from encheremove where enchereId="+this.enchereId+" order by id desc limit 1", con);
-        
+        ArrayList<EnchereMove> li = us.selectBySQL("select *from encheremove where enchereId=" + this.enchereId + " order by id desc limit 1", con);
+
         if (li.isEmpty() == true) {
             return null;
         }
         return (li.get(0));
     }
-    public static void setTransaction(EnchereMove move,int idEnchere) throws Exception
-    {
-     Enchere encours = new Enchere();
+
+    public static void setTransaction(EnchereMove move, int idEnchere) throws Exception {
+        Enchere encours = new Enchere();
         encours.setId(idEnchere);
         Connection con = Connexion.getConn();
         double d = move.getPrixMise();
@@ -147,10 +148,10 @@ public class EnchereMove extends ObjectBDD {
         taken.setPrixMise(d);
         EnchereMove avantWinner = encours.getEnchereMovesGagnantId(con);
         EnchereMove mo = move.lastMove(con);
-        System.err.println("```````````````````````"+mo);
+        System.err.println("```````````````````````" + mo);
         if (mo != null) {
             if (mo.getPrixMise() >= d) {
-                throw new Exception("Mise impossible");
+                throw new Exception("Miser plus que " + mo.getPrixMise());
             }
         }
         taken.setEnchereId(idEnchere);
@@ -161,14 +162,15 @@ public class EnchereMove extends ObjectBDD {
         taken.insert(con);
         EnchereMove lastwinner = encours.getEnchereMovesGagnantId(con);
         debite(move.lastMove(con));
- con.close();
-}
+        con.close();
+    }
+
     public void setPrixMise(double prixMise) throws Exception {
         System.out.println(this.getUsers().getCurrentMoney());
 //        if (prixMise > this.getUsers().getCurrentMoney()) {
 //            throw new Exception("Solde inferieur");
 //        } else {
-            this.prixMise = prixMise;
+        this.prixMise = prixMise;
 //        }
     }
 

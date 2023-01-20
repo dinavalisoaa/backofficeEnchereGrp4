@@ -35,16 +35,14 @@
       *********************************************************************************************************************************************************** -->
   <div id="login-page">
     <div class="container">
-      <form class="form-login" action="actionlogin" method="get">
-        <h2 class="form-login-heading">Login Adn</h2>
+      <form class="form-login" action="backoffice/actionlogin" method="get">
+        <h2 class="form-login-heading">Login Admin</h2>
         <div class="login-wrap">
           <input type="text" name="login"  class="form-control" value="root"placeholder="User ID" autofocus>
           <br>
           <input type="password" class="form-control" value="root" name="mdp" placeholder="Password">
           <label class="checkbox">
-            <input type="checkbox" value="remember-me"> Remember me
             <span class="pull-right">
-            <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>
             </span>
             </label>
           <button class="btn btn-theme btn-block" href="index.html" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>

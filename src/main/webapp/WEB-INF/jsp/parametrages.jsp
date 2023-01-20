@@ -35,17 +35,14 @@
                 TOP BAR CONTENT & NOTIFICATIONS
                 *********************************************************************************************************************************************************** -->
             <!--header start-->
-            <header class="header black-bg">
+              <header class="header black-bg">
                 <div class="sidebar-toggle-box">
                     <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
                 </div>
                 <!--logo start-->
-                <a href="index.html" class="logo"><b>DASH<span>IO</span></b></a>
+                <a href="index.html" class="logo"><b>EN<span>CHERE</span></b></a>
                 <!--logo end-->
                 <div class="nav notify-row" id="top_menu">
-                    <!--  notification start -->
-
-                    <!--  notification end -->
                 </div>
                 <div class="top-menu">
                     <ul class="nav pull-right top-menu">
@@ -60,29 +57,40 @@
                 MAIN SIDEBAR MENU
                 *********************************************************************************************************************************************************** -->
             <!--sidebar start-->
-           aside>
+           <aside>
                 <div id="sidebar" class="nav-collapse ">
                     <!-- sidebar menu start-->
                     <ul class="sidebar-menu" id="nav-accordion">
                         
 
                         <li class="sub-menu">
-                            <a href="categorie">
+                            <a class="panel" href="allcategorie">
                                 <i class="fa fa-desktop"></i>
                                 <span>Tableau de bord</span>
                             </a>
-                        </li>                        <li class="mt">
-
-                          <a class="active" href="statistiques">
+                        </li>
+                          <li class="mt">
+                             <a class="panel" href="alldemandes">
+                                <i class="fa fa-check-circle"></i>
+                                <span>Demandes</span>
+                            </a>
+                        </li>
+                        <li class="mt">
+                             <a class="panel" href="allstatistiques">
                                 <i class="fa fa-calculator"></i>
                                 <span>Statistique</span>
                             </a>
                         </li>
-                        
+                         <li class="mt">
+                             <a class="panel" href="allparametrages">
+                                <i class="fa fa-sellsy"></i>
+                                <span>Parametrages</span>
+                            </a>
+                        </li>
                     </ul>
                     <!-- sidebar menu end-->
                 </div>
-            </aside>            <!--sidebar end-->
+            </aside>       <!--sidebar end-->
             <!-- **********************************************************************************************************************************************************
                 MAIN CONTENT
                 *********************************************************************************************************************************************************** -->
@@ -94,11 +102,8 @@
                         <div class="col-md-12">
                              <div class="content-panel">
                                 <div class="showback">
-                                  <a href="allparametrages">   <button type="button" class="btn btn-info">Parametrage</button></a>
                                     <a href="allcategorie">   <button type="button" class="btn btn-primary">Categorie</button></a>
-                                    <a href="alldemandes">   <button type="button" class="btn btn-danger">Demande de rechargement</button></a>
                                     <a href="allcommissions">   <button type="button" class="btn btn-warning">Commission</button></a>
-                                    <a href="allstatistiques">   <button type="button" class="btn btn-success">Statistiques</button></a>
 
                                 </div>
                             </div>

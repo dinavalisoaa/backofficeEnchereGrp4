@@ -92,7 +92,7 @@
             <!--main content start-->
             <section id="main-content">
                 <section class="wrapper">
-                    <h3><i class="fa fa-angle-right"></i> Basic Table Examples</h3>
+                    <h3><i class="fa fa-angle-right"></i>Commission</h3>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="content-panel">
@@ -138,8 +138,9 @@
                                         <table style="width:80%" border="1" class="table table-striped table-responsive-md">
                                             <thead>
                                                 <tr>
-                                                    <th>Nom</th>          
-                                                    <th>Valeur</th>
+                                                    <th></th>
+                                                    <th>TAUX</th>          
+                                                    <th>DATY</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -147,6 +148,8 @@
                                                 <% if(i==0){%>
                                                 <tr style="background-color: antiquewhite">
                                                     <% } %>
+                                                                                                        <th></th>
+                                                                                                        <td></td>
                                             <td><%=cor.get(i).getTaux()%></td>
                                             <td><%=cor.get(i).getDaty()%></td>
                                             <td>  <a data-toggle="modal" href="#newCat"> 
@@ -169,28 +172,7 @@
             <!-- /MAIN CONTENT -->
             <!--main content end-->
             <!--footer start-->
-            <footer class="site-footer">
-                <div class="text-center">
-                    <p>
-                        &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
-                    </p>
-                    <div class="credits">
-                        <!--
-                          You are NOT allowed to delete the credit link to TemplateMag with free version.
-                          You can delete the credit link only if you bought the pro version.
-                          Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
-                          Licensing information: https://templatemag.com/license/
-                        -->
-                        Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
-                    </div>
-                    <a href="basic_table.html#" class="go-top">
-                        <i class="fa fa-angle-up"></i>
-                    </a>
-                </div>
-            </footer>
-            <!--footer end-->
-        </section>
-        <!-- js placed at the end of the document so the pages load faster -->
+             <!-- js placed at the end of the document so the pages load faster -->
         <script src="../lib/jquery/jquery.min.js"></script>
         <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
         <script class="include" type="text/javascript" src="../lib/jquery.dcjqaccordion.2.7.js"></script>

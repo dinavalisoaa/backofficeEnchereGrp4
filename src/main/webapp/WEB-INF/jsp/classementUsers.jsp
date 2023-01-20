@@ -102,7 +102,7 @@
             < <section id="main-content">
                 <section class="wrapper site-min-height">
 
-                    <h3><i class="fa fa-angle-right"></i> Morris Charts</h3>
+                    <h3><i class="fa fa-angle-right"></i>Tableau statistiques<i class="fa fa-angle-right"></i>Utilisateurs</h3>
                     <div class="showback">
                                             <a href="classementCategorie">   <button type="button" class="btn btn-info">Classement des Categories</button></a>
                         <a href="classementUsers">   <button type="button" class="btn btn-facebook">Classement des Utilisateur</button></a>

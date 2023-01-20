@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+     <!DOCTYPE html>
 <html lang="en">
     <%@page import="model.*" %>
+    <%@page import="java.util.ArrayList" %>
+
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,16 +12,16 @@
         <title>Dashio - Bootstrap Admin Template</title>
 
         <!-- Favicons -->
-        <link href="../img/favicon.png" rel="icon">
-        <link href="../img/apple-touch-icon.png" rel="apple-touch-icon">
+        <link href="../../img/favicon.png" rel="icon">
+        <link href="../../img/apple-touch-icon.png" rel="apple-touch-icon">
 
         <!-- Bootstrap core CSS -->
-        <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!--external css-->
-        <link href="../lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="../../lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
         <!-- Custom styles for this template -->
-        <link href="../css/style.css" rel="stylesheet">
-        <link href="../css/style-responsive.css" rel="stylesheet">
+        <link href="../../css/style.css" rel="stylesheet">
+        <link href="../../css/style-responsive.css" rel="stylesheet">
 
         <!-- =======================================================
           Template Name: Dashio
@@ -27,9 +29,12 @@
           Author: TemplateMag.com
           License: https://templatemag.com/license/
         ======================================================= -->
-    </head>                        <% Parametrage[]cor=(Parametrage[])request.getAttribute("parametrages");%>
+    
+    </head>                              
 
     <body>
+          <% ArrayList<Categorie>cor=(ArrayList<Categorie>)request.getAttribute("chiffrecategorie");%>
+      
         <section id="container">
             <!-- **********************************************************************************************************************************************************
                 TOP BAR CONTENT & NOTIFICATIONS
@@ -96,140 +101,360 @@
                 MAIN CONTENT
                 *********************************************************************************************************************************************************** -->
             <!--main content start-->
-            <section id="main-content">
-                <section class="wrapper">
-                    <h3><i class="fa fa-angle-right"></i> Basic Table Examples</h3>
-                    <div class="row">
-                        <div class="col-md-12">
-                             <div class="content-panel">
-                                <div class="showback">
-                                    <a href="classementCategorie">   <button type="button" class="btn btn-info">Classement des Categories</button></a>
-                                    <a href="allstatistiques">   <button type="button" class="btn btn-success">Statistiques</button></a>
+            < <section id="main-content">
+                <section class="wrapper site-min-height">
 
-                                </div>
-                            </div>
-                            <!-- Modal -->
-                            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="newCat" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title">Ajouter  categorie d'enchere</h4>
-                                        </div>
-                                        <div class="modal-body">                  <form action="newCat" method="get">
-
-                                                <p>Nom de la categorie</p>
-                                                <input type="text" name="nom" placeholder="nom" class="form-control placeholder-no-fix">
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-                                                    <button class="btn btn-theme" type="submit">Submit</button>
-                                                </div>
-    </form>
-                                        </div>
-                                    </div>
-                                </div>        <!-- Modal -->
-                                
-   <% for(int i=0;i<cor.length;i++){%>
-   <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="delCat<%=cor[i].getId()%>" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title">Edit</h4>
-                                        </div>
-                                        <div class="modal-body">                  <form action="updateParametrages" method="get">
-                                                <input type="hidden" name="id"value="<%=cor[i].getId()%>">
-                                                <p><%=cor[i].getNom()%></p>
-                                                </div>
-                                                <label>Parametrage</label>
-                                                <input type="text" name="value"value="<%=cor[i].getValue()%>" >
-                                                <div class="modal-footer">
-                                                    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-                                                    <button class="btn btn-theme" type="submit">Submit</button>
-                                                </div>
-   </form>
-                                        </div>
-                                    </div>
-                                </div>  <% } %>
-                            </div>
-                        </div>
-                        <!-- /col-md-12 -->
-
-                        <!-- /col-md-12 -->
-                        <!-- row -->
+                    <h3><i class="fa fa-angle-right"></i>Tableau statistiques<i class="fa fa-angle-right"></i>Utilisateurs</h3>
+                    <div class="showback">
+                                            <a href="classementCategorie">   <button type="button" class="btn btn-info">Classement des Categories</button></a>
+                        <a href="classementUsers">   <button type="button" class="btn btn-facebook">Classement des Utilisateur</button></a>
+   
+                    </div>
+                    <!-- page start-->
+                    <div id="morris">
                         <div class="row mt">
-                            <div class="col-md-12">
+                            <div class="col-lg-8">
                                 <div class="content-panel">
-
-                                    <table style="width:80%" border="1" class="table table-striped table-responsive-md">
-                                        <thead>
-                                            <tr>
-                                                <th>Id<%=cor.length%></th>
-                                                <th>Nom</th>          
-                                                <th>Valeur</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% for(int i=0;i<cor.length;i++){%>
-                                        <td><%=cor[i].getNom()%></td>
-                                                                                <td><%=cor[i].getValue()%></td>
-
-                                                <!--<td><a data-toggle="modal" href="#newCat>"> <button class="btn btn-success btn-xs"><i class="fa fa-plus">Add</i></button></a>-->
-                                                <td><a data-toggle="modal" href="#newCat"> 
-                                                        <button class="btn btn-primary btn-xs"><i class="fa fa-plus">Add</i></button></a>
-                                                    <a data-toggle="modal" href="#delCat<%=cor[i].getId()%>">  <button class="btn btn-success btn-xs"><i class="fa fa-pencil ">Del</i></button>
-                                                </td>
-                                            </tr>
-                                            <%
-                                            } 
-                                            %>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                                <!-- /content-panel -->
-                            </div>
-                            <!-- /col-md-12 -->
+                                    <h4><i class="fa fa-angle-right"></i>Rentablite des categorie</h4>
+                                    <div class="card-body">
+                                         <canvas id="areaChart"></canvas>
+                                    </div>
+                                </div> 
+                           
                         </div>
-                        <!-- /row -->
+                            <div class="col-lg-4">
+                                <div class="content-panel">
+                                    <div class="grey-panel pn donut-chart">
+                  <div class="grey-header">
+                    <h5>Top Categorie </h5>
+                       <div class="col-sm-6 col-xs-6 goleft">
+                      <h3><br/>
+                      <% Categorie ca=(Categorie)request.getAttribute("aime"); %>
+                      <%=ca.getNom() %>
+                      </h3>
+                       <h2><%=request.getAttribute("pc")%>%</h2>
+                    </div>
+                    <div class="col-sm-6 col-xs-6">
+                     
+                    </div>
+                  </div>
+                  </div>
+                
+                  <div class="row">
+                 
+                </div>
+                                    
+                                </div>
+                                
+                            </div>
+
+                    </div>
+                    <!-- page end-->
                 </section>
             </section>
-            <!-- /MAIN CONTENT -->
-            <!--main content end-->
-            <!--footer start-->
-            <footer class="site-footer">
-                <div class="text-center">
-                    <p>
-                        &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
-                    </p>
-                    <div class="credits">
-                        <!--
-                          You are NOT allowed to delete the credit link to TemplateMag with free version.
-                          You can delete the credit link only if you bought the pro version.
-                          Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
-                          Licensing information: https://templatemag.com/license/
-                        -->
-                        Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
-                    </div>
-                    <a href="basic_table.html#" class="go-top">
-                        <i class="fa fa-angle-up"></i>
-                    </a>
-                </div>
-            </footer>
             <!--footer end-->
         </section>
+        
         <!-- js placed at the end of the document so the pages load faster -->
-        <script src="../lib/jquery/jquery.min.js"></script>
-        <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
-        <script class="include" type="text/javascript" src="../lib/jquery.dcjqaccordion.2.7.js"></script>
-        <script src="../lib/jquery.scrollTo.min.js"></script>
-        <script src="../lib/jquery.nicescroll.js" type="text/javascript"></script>
-        <!--common script for all pages-->
-        <script src="../lib/common-scripts.js"></script>
-        <!--script for this page-->
+       <script src="../js/js/vendor.bundle.base.js"></script>
+        <script src="../js/js.chart.js/Chart.min.js"></script>
+        <!-- End plugin js for this page -->
+        <!-- inject:js -->
+        <script src="../js/off-canvas.js"></script>
+        <script src="../js/hoverable-collapse.js"></script>
+        <script src="../js/template.js"></script>
+        <script src="../js/settings.js"></script>
+        <script src="../js/todolist.js"></script>
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <!--<script src="../js/chart.js"></script>-->
+        <!-- End custom js for this page-->
+        <script src="../lib/chartjs-conf.js"></script>
+    <script>
 
+        /* ChartJS
+         * -------
+         * Data and config for chartjs
+         */
+        'use strict';
+        var data = {
+        labels: [<% for(int i=0;i<cor.size();i++){ %>
+        "<%=cor.get(i).getId() %>",
+        <% } %>],
+                datasets: [{
+                label: 'Activite',
+                        data: [
+        <% for(int i=0;i<cor.size();i++){ %>
+        <%=cor.get(i).getId()%>,
+        <%} %>
+                        ],
+                        data: [10, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+        <% for(int i=0;i<cor.size();i++){ %>
+                        'rgba(54, 162, 235, 0.2)',
+        <%} %>
+                        ],
+                        borderColor: [
+        <% for(int i=0;i<cor.size();i++){ %>
+                        'rgba(54, 162, 235, 0.2)',
+        <%} %>
+
+                        ],
+                        borderWidth: 1,
+                        fill: false
+                }]
+        };
+        var multiLineData = {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                label: 'Dataset 1',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderColor: [
+                                '#587ce4'
+                        ],
+                        borderWidth: 2,
+                        fill: false
+                },
+                {
+                label: 'Dataset 2',
+                        data: [5, 23, 7, 12, 42, 23],
+                        borderColor: [
+                                '#ede190'
+                        ],
+                        borderWidth: 2,
+                        fill: false
+                },
+                {
+                label: 'Dataset 3',
+                        data: [15, 10, 21, 32, 12, 33],
+                        borderColor: [
+                                '#f44252'
+                        ],
+                        borderWidth: 2,
+                        fill: false
+                }
+                ]
+        };
+        var options = {
+        scales: {
+        yAxes: [{
+        ticks: {
+        beginAtZero: true
+        }
+        }]
+        },
+                legend: {
+                display: false
+                },
+                elements: {
+                point: {
+                radius: 0
+                }
+                }
+
+        };
+        
+        
+        var areaData = {
+        labels: [<% for(int i=0;i<cor.size();i++){ %>
+        "<%=cor.get(i).getNom() %>",
+        <% } %>],
+                datasets: [{
+                label: 'ARIARY',
+                        data: [
+        <% for(int i=0;i<cor.size();i++){ %>
+        <%=cor.get(i).getChiffreAffaire()%>,
+        <%} %>
+                        ],
+                        backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1,
+                        fill: true, // 3: no fill
+                }]
+        };
+        var areaOptions = {
+        plugins: {
+        filler: {
+        propagate: true
+        }
+        }
+        }
+
+        var multiAreaData = {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [{
+                label: 'Facebook',
+                        data: [8, 11, 13, 15, 12, 13, 16, 15, 13, 19, 11, 14],
+                        borderColor: ['rgba(255, 99, 132, 0.5)'],
+                        backgroundColor: ['rgba(255, 99, 132, 0.5)'],
+                        borderWidth: 1,
+                        fill: true
+                },
+                {
+                label: 'Twitter',
+                        data: [7, 17, 12, 16, 14, 18, 16, 12, 15, 11, 13, 9],
+                        borderColor: ['rgba(54, 162, 235, 0.5)'],
+                        backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+                        borderWidth: 1,
+                        fill: true
+                },
+                {
+                label: 'Linkedin',
+                        data: [6, 14, 16, 20, 12, 18, 15, 12, 17, 19, 15, 11],
+                        borderColor: ['rgba(255, 206, 86, 0.5)'],
+                        backgroundColor: ['rgba(255, 206, 86, 0.5)'],
+                        borderWidth: 1,
+                        fill: true
+                }
+                ]
+        };
+        var multiAreaOptions = {
+        plugins: {
+        filler: {
+        propagate: true
+        }
+        },
+                elements: {
+                point: {
+                radius: 0
+                }
+                },
+                scales: {
+                xAxes: [{
+                gridLines: {
+                display: false
+                }
+                }],
+                        yAxes: [{
+                        gridLines: {
+                        display: false
+                        }
+                        }]
+                }
+        }
+
+        var scatterChartData = {
+        datasets: [{
+        label: 'First Dataset',
+                data: [{
+                x: - 10,
+                        y: 0
+                },
+                {
+                x: 0,
+                        y: 3
+                },
+                {
+                x: - 25,
+                        y: 5
+                },
+                {
+                x: 40,
+                        y: 5
+                }
+                ],
+                backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                        'rgba(255,99,132,1)'
+                ],
+                borderWidth: 1
+        },
+        {
+        label: 'Second Dataset',
+                data: [{
+                x: 10,
+                        y: 5
+                },
+                {
+                x: 20,
+                        y: - 30
+                },
+                {
+                x: - 25,
+                        y: 15
+                },
+                {
+                x: - 10,
+                        y: 5
+                }
+                ],
+                backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+        }
+        ]
+        }
+
+        var scatterChartOptions = {
+        scales: {
+        xAxes: [{
+        type: 'linear',
+                position: 'bottom'
+        }]
+        }
+        }
+        // Get context with jQuery - using jQuery's .get() method.
+        if ($("#barChart").length) {
+        var barChartCanvas = $("#barChart").get(0).getContext("2d");
+        // This will get the first returned node in the jQuery collection.
+        var barChart = new Chart(barChartCanvas, {
+        type: 'bar',
+                data: data,
+                options: options
+        });
+        }
+
+        if ($("#lineChart").length) {
+        var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
+        var lineChart = new Chart(lineChartCanvas, {
+        type: 'line',
+                data: data,
+                options: options
+        });
+        }
+
+        if ($("#linechart-multi").length) {
+        var multiLineCanvas = $("#linechart-multi").get(0).getContext("2d");
+        var lineChart = new Chart(multiLineCanvas, {
+        type: 'line',
+                data: multiLineData,
+                options: options
+        });
+        }
+
+
+        if ($("#areaChart").length) {
+        var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+        var areaChart = new Chart(areaChartCanvas, {
+        type: 'line',
+                data: areaData,
+                options: areaOptions
+        });
+        }
+
+
+
+    </script>
     </body>
 
 </html>

@@ -116,10 +116,10 @@ public class Stat {
         Connection connection = null;
         double retu = 0;
         try {
-         
+
             String sql = "select avg(sum) as avg from (select sum(commission),mois From chiffreEnchere group by mois) as foo;\n"
                     + "";
-            PreparedStatement preparedStatement =con.prepareStatement(sql);
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 retu = resultSet.getDouble("avg");
@@ -129,7 +129,7 @@ public class Stat {
             throw e;
         } finally {
 //            resultSe
-          
+
         }
         return retu;
     }
@@ -137,12 +137,12 @@ public class Stat {
     public static double getChiffreAffaireAnnuel(Connection con) throws SQLException, Exception {
         Categorie valiny = null;
         double retu = 0;
-        
+
         try {
-            
+
             String sql = "select avg(sum) as avg from (select sum(commission),annee From chiffreEnchere group by annee) as foo;\n"
                     + "";
-            PreparedStatement preparedStatement =con.prepareStatement(sql);
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 retu = resultSet.getDouble("avg");
@@ -158,15 +158,16 @@ public class Stat {
 
     public static ArrayList<Categorie> categorieLePlusAimes(Connection con) throws Exception {
         Categorie valiny = null;
-ResultSet resultSet=null;     PreparedStatement preparedStatement =null;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
         ArrayList<Categorie> va = new ArrayList<Categorie>();
         try {
-           
+
             String sql = "select count(en.categorieid) as isa ,cat.id from categorie cat full join encheremove emv join enchere en on en.id=emv.enchereid  \n"
                     + "  on cat.id=en.categorieid group by cat.id \n"
                     + " order by isa desc";
-         preparedStatement = con.prepareStatement(sql);
-             resultSet = preparedStatement.executeQuery();
+            preparedStatement = con.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Categorie categorie = new Categorie();
                 categorie.setId(resultSet.getInt("id"));
@@ -177,14 +178,47 @@ ResultSet resultSet=null;     PreparedStatement preparedStatement =null;
                 va.add(categorie);
             }
         } catch (Exception e) {
-            
+
             e.printStackTrace();
             throw e;
         } finally {
-           resultSet.close();
-           preparedStatement.close();
-           
-        } return va;
+            resultSet.close();
+            preparedStatement.close();
+
+        }
+        return va;
+    }
+    public static Categorie getcategorieLePlusAimes(Connection con) throws Exception {
+        Categorie valiny = null;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<Categorie> va = new ArrayList<Categorie>();
+        try {
+
+            String sql = "select count(en.categorieid) as isa ,cat.id from categorie cat full join encheremove emv join enchere en on en.id=emv.enchereid  \n"
+                    + "  on cat.id=en.categorieid group by cat.id \n"
+                    + " order by isa desc limit 1";
+            preparedStatement = con.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Categorie categorie = new Categorie();
+                categorie.setId(resultSet.getInt("id"));
+                categorie = categorie.getCategorie();
+                //System.out.println(resultSet.getInt("usersid"));
+                categorie.setPersInteresser(resultSet.getInt("isa"));
+                //System.out.println(resultSet.getInt("som"));
+                va.add(categorie);
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            throw e;
+        } finally {
+            resultSet.close();
+            preparedStatement.close();
+
+        }
+        return va.get(0);
     }
 
     public static ArrayList<Categorie> getChiffreAffaireParCategorie(Connection con) throws SQLException {
@@ -192,10 +226,10 @@ ResultSet resultSet=null;     PreparedStatement preparedStatement =null;
         Connection connection = null;
         ArrayList<Categorie> va = new ArrayList<Categorie>();
         try {
-      
+
             String sql = " select case when sum(commission)>0 then sum(commission) else 0 end prixmise ,ct.id From categorie ct full join"
                     + " chiffreEnchere ce on ce.categorieid=ct.id group by ct.id order by prixmise desc";
-            PreparedStatement preparedStatement =con.prepareStatement(sql);
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Categorie categorie = new Categorie();
@@ -208,7 +242,7 @@ ResultSet resultSet=null;     PreparedStatement preparedStatement =null;
             e.printStackTrace();
             throw e;
         } finally {
-          
+
             return va;
         }
     }
@@ -231,6 +265,39 @@ ResultSet resultSet=null;     PreparedStatement preparedStatement =null;
                 categorie = categorie.getUsers();
                 categorie.setRentabilite(resultSet.getDouble("sum"));
                 va.add(categorie);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            return va;
+        }
+    }
+
+    public static ArrayList<Enchere> getEnchereLePlusRentable(Connection con) throws SQLException {
+        Categorie valiny = null;
+        ArrayList<Enchere> va = new ArrayList<Enchere>();
+        try {
+
+            String sql = " select sum(commission),id,categorieid from"
+                    + "(select us.id ,us.categorieid,case when commission>0 then"
+                    + "   commission else 0 end commission From Enchere "
+                    + "us full join chiffreEnchere ce on us.id=ce.enchereid)"
+                    + " as foo group by id,categorieid order by sum desc";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Enchere categorie = new Enchere();
+                categorie.setId(resultSet.getInt("id"));
+                categorie = categorie.getEnchere();
+                Categorie jj = new Categorie();
+                jj.
+                        setId(resultSet.getInt("categorieid"));
+                categorie.setCat(jj.getCategorie());
+                categorie.setCategorieId(resultSet.getInt("categorieid"));
+                categorie.setRentabilite(resultSet.getDouble("sum"));
+                va.add(categorie);
+//                categorie.getNbPersonne()
             }
         } catch (Exception e) {
             e.printStackTrace();

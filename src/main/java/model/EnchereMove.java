@@ -1,9 +1,11 @@
 package model;
 
+import BddObject.Connexion;
 import BddObject.Ignore;
 import BddObject.InfoDAO;
 import BddObject.ObjectBDD;
 import java.sql.Connection;
+import java.util.ArrayList;
 
 /**
  *
@@ -101,6 +103,66 @@ public class EnchereMove extends ObjectBDD {
         us.setId(this.id);
         return ((EnchereMove) us.select(null).get(0));
     }
+  
+    public static void debite(EnchereMove en) throws Exception {
+        if (en.getState() == 0) {
+            Compte iray = new Compte();
+            iray.setMontant(en.getPrixMise() * -1);
+            iray.setUsersId(en.getUsersId());
+            iray.insert(null);
+            EnchereMove vaov = new EnchereMove();
+            vaov.setId(en.getId());
+            vaov.setState(1);
+            vaov.update("id", null);
+        }
+    }
+
+    public static void credite(EnchereMove en) throws Exception {
+        Compte iray = new Compte();
+        iray.setMontant(en.getPrixMise());
+        iray.setUsersId(en.getUsersId());
+        iray.insert(null);
+        EnchereMove vaov = new EnchereMove();
+        vaov.setId(en.getId());
+        vaov.setState(0);
+        vaov.update("id", null);
+    }
+
+    public  EnchereMove lastMove(Connection con) throws Exception {
+        EnchereMove us = new EnchereMove();
+      ArrayList<EnchereMove> li=us.selectBySQL("select *from encheremove where enchereId="+this.enchereId+" order by id desc limit 1", con);
+        
+        if (li.isEmpty() == true) {
+            return null;
+        }
+        return (li.get(0));
+    }
+    public static void setTransaction(EnchereMove move,int idEnchere) throws Exception
+    {
+     Enchere encours = new Enchere();
+        encours.setId(idEnchere);
+        Connection con = Connexion.getConn();
+        double d = move.getPrixMise();
+        EnchereMove taken = new EnchereMove();
+        taken.setPrixMise(d);
+        EnchereMove avantWinner = encours.getEnchereMovesGagnantId(con);
+        EnchereMove mo = move.lastMove(con);
+        System.err.println("```````````````````````"+mo);
+        if (mo != null) {
+            if (mo.getPrixMise() >= d) {
+                throw new Exception("Mise impossible");
+            }
+        }
+        taken.setEnchereId(idEnchere);
+        taken.setUsersId(move.getUsersId());
+        if (avantWinner != null) {
+            credite(avantWinner);
+        }
+        taken.insert(con);
+        EnchereMove lastwinner = encours.getEnchereMovesGagnantId(con);
+        debite(move.lastMove(con));
+ con.close();
+}
     public void setPrixMise(double prixMise) throws Exception {
         System.out.println(this.getUsers().getCurrentMoney());
 //        if (prixMise > this.getUsers().getCurrentMoney()) {

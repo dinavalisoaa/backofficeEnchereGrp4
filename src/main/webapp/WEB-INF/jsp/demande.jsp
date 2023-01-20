@@ -103,13 +103,18 @@
                         <div class="col-md-12">
                             <div class="content-panel">
                                 <div class="showback">
-                                  <a href="allparametrages">   <button type="button" class="btn btn-info">Parametrage</button></a>
-                                    <a href="allcategorie">   <button type="button" class="btn btn-primary">Categorie</button></a>
-                                    <a href="alldemandes">   <button type="button" class="btn btn-danger">Demande de rechargement</button></a>
-                                    <a href="allcommissions">   <button type="button" class="btn btn-warning">Commission</button></a>
-                                    <a href="allstatistiques">   <button type="button" class="btn btn-success">Statistiques</button></a>
-
-                                </div>
+                                    <a href="alldemandes?etat=-2">  
+                                        <button type="button" class="btn btn-facebook"><i class="fa fa-table"></i>Tous Demande</button>
+                                    </a>
+                                   
+                                    <a href="alldemandes?etat=11">  
+                                        <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i>Demande refuser</button>
+                                    </a>
+                                    <a href="alldemandes?etat=1">  
+                                        <button type="button" class="btn btn-success"><i class="fa fa-check-square"></i>Demande Valider</button>
+                                    </a>
+                                   
+                                    </div>
                                 <form action="demandes" method="get">
 
                                     <div class="showback">
@@ -228,25 +233,7 @@
                             <!-- /MAIN CONTENT -->
                             <!--main content end-->
                             <!--footer start-->
-                            <footer class="site-footer">
-                                <div class="text-center">
-                                    <p>
-                                        &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
-                                    </p>
-                                    <div class="credits">
-                                        <!--
-                                          You are NOT allowed to delete the credit link to TemplateMag with free version.
-                                          You can delete the credit link only if you bought the pro version.
-                                          Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
-                                          Licensing information: https://templatemag.com/license/
-                                        -->
-                                        Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
-                                    </div>
-                                    <a href="basic_table.html#" class="go-top">
-                                        <i class="fa fa-angle-up"></i>
-                                    </a>
-                                </div>
-                            </footer>
+                            
                             <!--footer end-->
                             </section>
                             <!-- js placed at the end of the document so the pages load faster -->

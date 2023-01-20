@@ -68,18 +68,21 @@ public class TypeController {
         gor.insert(null);
         return "redirect:allcategorie";
     }
+
     @RequestMapping("/allcommissions")
     public String allCom(HttpServletRequest request, Model model) throws Exception {
-        model.addAttribute("commission", new Commission().selectBySQL("select *from commission order by daty desc",null));
+        model.addAttribute("commission", new Commission().selectBySQL("select *from commission order by daty desc", null));
         return "commission";
     }
- @RequestMapping("/addCommission")
+
+    @RequestMapping("/addCommission")
     public String addCOm(HttpServletRequest request, Model model) throws Exception {
-        Commission com=new Commission();
+        Commission com = new Commission();
         com.setTaux(Double.valueOf(request.getParameter("taux")));
         model.addAttribute("commission", new Commission().select(null));
         return "redirect:allcommission";
     }
+
     @RequestMapping("/delCat")
     public String delCat(HttpServletRequest request, Model model) throws Exception {
         Categorie gor = new Categorie();
@@ -97,9 +100,25 @@ public class TypeController {
 
     @RequestMapping("/allstatistiques")
     public String statistiques(HttpServletRequest request, Model model) throws Exception {
+        Connection con = Connexion.getConn();
+
+        model.addAttribute("aime", Stat.getcategorieLePlusAimes(con));
+        model.addAttribute("pc", Stat.getcategorieLePlusAimes(con).getPersInteresser() * 100 / Stat.categorieLePlusAimes(con).size());
+        model.addAttribute("chiffrecategorie", Stat.getChiffreAffaireParCategorie(con));
+
+//        model.addAttribute("chiffremois", Stat.getChiffreAffaireMois(con));
+//        model.addAttribute("chiffrejour", Stat.getChiffreAffaireJour(con));
+//        model.addAttribute("chiffrean", Stat.getChiffreAffaireAnnuel(con));
         model.addAttribute("parametrages", new Parametrage().parametrages());
+        model.addAttribute("encheres", Stat.getEnchereLePlusRentable(con));
+        //        model.addAttribute("pct",);
+        //        -- > 100
+        //        sta
+          con.close();
+
         return "statistiques";
     }
+//    getEnchereLePlusRentable
 
     @RequestMapping("/classementCategorie")
     public String classementCategorie(HttpServletRequest request, Model model) throws Exception {

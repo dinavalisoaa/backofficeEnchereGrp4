@@ -18,7 +18,7 @@ import com.mongodb.client.MongoDatabase;
  *
  * @author karen
  */
-public class Connexions {
+public class Connexion {
     public static Connection getConnection() throws Exception {
         Connection con = null;
         Class.forName("org.postgresql.Driver");

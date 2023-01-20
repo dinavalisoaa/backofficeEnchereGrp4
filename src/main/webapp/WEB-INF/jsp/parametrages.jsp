@@ -97,13 +97,13 @@
             <!--main content start-->
             <section id="main-content">
                 <section class="wrapper">
-                    <h3><i class="fa fa-angle-right"></i> Basic Table Examples</h3>
+                    <h3><i class="fa fa-angle-right"></i>Modificationd es</h3>
                     <div class="row">
                         <div class="col-md-12">
                              <div class="content-panel">
                                 <div class="showback">
-                                    <a href="allcategorie">   <button type="button" class="btn btn-primary">Categorie</button></a>
-                                    <a href="allcommissions">   <button type="button" class="btn btn-warning">Commission</button></a>
+                                    <a href="#">   <button type="button" class="btn btn-warning">PARAMETRAGE</button></a>
+                                    <!--<a href="allcommissions">   <button type="button" class="btn btn-warning">Commission</button></a>-->
 
                                 </div>
                             </div>
@@ -198,25 +198,7 @@
             <!-- /MAIN CONTENT -->
             <!--main content end-->
             <!--footer start-->
-            <footer class="site-footer">
-                <div class="text-center">
-                    <p>
-                        &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
-                    </p>
-                    <div class="credits">
-                        <!--
-                          You are NOT allowed to delete the credit link to TemplateMag with free version.
-                          You can delete the credit link only if you bought the pro version.
-                          Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
-                          Licensing information: https://templatemag.com/license/
-                        -->
-                        Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
-                    </div>
-                    <a href="basic_table.html#" class="go-top">
-                        <i class="fa fa-angle-up"></i>
-                    </a>
-                </div>
-            </footer>
+            
             <!--footer end-->
         </section>
         <!-- js placed at the end of the document so the pages load faster -->

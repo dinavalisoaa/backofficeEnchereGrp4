@@ -41,7 +41,7 @@
                 TOP BAR CONTENT & NOTIFICATIONS
                 *********************************************************************************************************************************************************** -->
             <!--header start-->
-             <header class="header black-bg">
+            <header class="header black-bg">
                 <div class="sidebar-toggle-box">
                     <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
                 </div>
@@ -63,11 +63,11 @@
                 MAIN SIDEBAR MENU
                 *********************************************************************************************************************************************************** -->
             <!--sidebar start-->
-           <aside>
+            <aside>
                 <div id="sidebar" class="nav-collapse ">
                     <!-- sidebar menu start-->
                     <ul class="sidebar-menu" id="nav-accordion">
-                        
+
 
                         <li class="sub-menu">
                             <a class="panel" href="allcategorie">
@@ -75,20 +75,20 @@
                                 <span>Tableau de bord</span>
                             </a>
                         </li>
-                          <li class="mt">
-                             <a class="panel" href="alldemandes">
+                        <li class="mt">
+                            <a class="panel" href="alldemandes">
                                 <i class="fa fa-check-circle"></i>
                                 <span>Demandes</span>
                             </a>
                         </li>
                         <li class="mt">
-                             <a class="panel" href="allstatistiques">
+                            <a class="panel" href="allstatistiques">
                                 <i class="fa fa-calculator"></i>
                                 <span>Statistique</span>
                             </a>
                         </li>
-                         <li class="mt">
-                             <a class="panel" href="allparametrages">
+                        <li class="mt">
+                            <a class="panel" href="allparametrages">
                                 <i class="fa fa-sellsy"></i>
                                 <span>Parametrages</span>
                             </a>
@@ -108,9 +108,9 @@
                     <h3><i class="fa fa-angle-right"></i>Tableau statistiques</h3>
                     <div class="showback">
 
-                                            <a href="classementCategorie">   <button type="button" class="btn btn-info">Classement des Categories</button></a>
+                        <a href="classementCategorie">   <button type="button" class="btn btn-info">Classement des Categories</button></a>
                         <a href="classementUsers">   <button type="button" class="btn btn-facebook">Classement des Utilisateur</button></a>
-                       </div>
+                    </div>
                     <!-- page start-->
                     <div id="morris">
                         <div class="row mt">
@@ -183,10 +183,10 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                
+
                             </div>
-                                                <div class="col-lg-6">
-                                
+                            <div class="col-lg-6">
+
                             </div>
                         </div>
                     </div>

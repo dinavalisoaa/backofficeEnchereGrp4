@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import model.*;
 import com.google.gson.*;
+import com.legal.legal.mongo.MongoRepository;
+import java.time.LocalDate;
 import java.util.HashMap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -70,4 +72,53 @@ public class EnchereService {
        _val_.put("data",all);
         return gson.toJson(_val_);
     }
+    @GetMapping("encheres/{id}/gagnant")
+    String getGagnatn(@PathVariable int id) throws Exception {
+        Enchere am = new Enchere();
+        am.setId(id);
+        am=am.getEnchere();
+//        am.getGagnant();
+        Gson gson = new Gson();
+         HashMap _val_ = new HashMap<String, Object>();
+         am.setUserGagnant(am.getGagnant());
+//         ArrayList<Enchere> all = new ArrayList<>();
+//            ArrayList<Enchere> alls =am.select(null);
+//            for (int i = 0; i < alls.size(); i++) {
+//                Enchere get = alls.get(i);
+//                Users vo = new Users();
+//                vo.setId(get.getUsersId());
+//                Categorie gorie=new Categorie();
+//                gorie.setId(get.getCategorieId());
+//                get.setCat(gorie.getCategorie());
+//                get.setUserGagnant(vo.getUsers());
+//                all.add(get);
+//            }
+       _val_.put("data",am);
+        return gson.toJson(_val_);
+    
+    }
+    @PostMapping("encheres/{id}/close")
+    String close(@PathVariable int id) throws Exception {
+        EnchereClose am = new EnchereClose();
+        am.setEnchereId(id);
+        am.setDateClose(LocalDate.now().toString());
+        MongoRepository mon=new MongoRepository();
+        mon.Create(am);
+        Gson gson = new Gson();
+         HashMap _val_ = new HashMap<String, Object>();
+         _val_.put("val",mon.List());
+//       _val_.put("data",new Fail(Boolean.toString(am.isExpirer()), "200"));
+        return gson.toJson(_val_);
+    }
+     @GetMapping("encheres/{id}/etatexp")
+    String getExp(@PathVariable int id) throws Exception {
+        Enchere am = new Enchere();
+        am.setId(id);
+        am=am.getEnchere();
+        Gson gson = new Gson();
+         HashMap _val_ = new HashMap<String, Object>();
+       _val_.put("data",new Fail(Boolean.toString(am.isExpirer()), "200"));
+        return gson.toJson(_val_);
+    }
+    
 }

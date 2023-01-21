@@ -25,21 +25,21 @@ import utils.Success;
 public class GagnantEnchereService {
 //creer son propres en Encheres
 
-    @GetMapping("encheres/{id}/gagnant")
-    String Create(@PathVariable int id) throws Exception {
-        Gson gson = new Gson();
-        String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
-        try {
-//           Encheres
-//            demn.insert(null);
-//            texte = gson.toJson(new Message(new Success(demn.getLastID(), "Success")));
-        } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
-        }
-        return texte;
-    }
-//
+//    @GetMapping("encheres/{id}/gagnant")
+//    String Create(@PathVariable int id) throws Exception {
+//        Gson gson = new Gson();
+//        String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
+//        try {
+////           Encheres
+////            demn.insert(null);
+////            texte = gson.toJson(new Message(new Success(demn.getLastID(), "Success")));
+//        } catch (Exception ex) {
+//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            throw ex;
+//        }
+//        return texte;
+//    }
+////
 //    @PutMapping("parametrages/{id}")
 //    String put(@PathVariable int id,@RequestParam String nom,@RequestParam String value) throws Exception {
 //        Gson gson = new Gson();

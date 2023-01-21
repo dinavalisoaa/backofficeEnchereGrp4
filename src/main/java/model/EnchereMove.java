@@ -173,24 +173,27 @@ public class EnchereMove extends ObjectBDD {
         us.setId(this.enchereId);
         return ((Enchere) us.select(null).get(0));
     }
-    public void setPrixMise(double prixMise) throws Exception {
+    public void setPrixMise(double prixMisex) throws Exception {
+        try{
         Connection con = Connexion.getConn();
-        System.out.println(this.getUsers().getCurrentMoney());
+        System.out.println("--->"+this.getUsers().getCurrentMoney());
         Enchere ito = getEncheres();
-        if (this.getUsers().getCurrentMoney() < prixMise) {
-            throw new Exception("Solde insuffisant");
+        if (new Double(this.getUsers().getCurrentMoney()) < prixMisex) {
+            throw new Exception("Solde insuffisant actuel :"+this.getUsers().getCurrentMoney());
         }
 
 //        EnchereMove moves = new EnchereMove();
 //        moves.setEnchereId(this.enchereId);
 //System.out.println("PRIX IN:"+this.getPrixMise());
 //if(prixMise<ito)
-        if (prixMise < ito.getPrixMin()) {
+        if (prixMisex < ito.getPrixMin()) {
             throw new Exception("Prix de Mise trop petit que " + ito.getPrixMin());
         } else {
-            this.prixMise = prixMise;
+            this.prixMise = prixMisex;
         }
-
+        }catch(Exception e){
+        throw e;
+        }
 //        }
     }
 

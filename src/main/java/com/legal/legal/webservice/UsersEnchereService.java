@@ -28,9 +28,18 @@ public class UsersEnchereService {
     @PostMapping("/users/{id}/encheres")
     String Create(@RequestParam double prixMin,
             @PathVariable int id, @RequestParam int categorieId,
-            @RequestParam String descriProduit, @RequestParam double durer) throws Exception {
-        Gson gson = new Gson();
+            @RequestParam String descriProduit, @RequestParam double durer, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
 
+        Gson gson = new Gson();
+        try {
+            TokenHandler tokens = new TokenHandler().ToToken(token);
+            int usersId = tokens.getUtilisateur();
+            System.err.println(usersId);
+        } catch (Exception d) {
+            _val_.put("error", new Fail(d.getMessage(), "404"));
+            return gson.toJson(_val_);
+        }
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
 
         try {
@@ -45,7 +54,7 @@ public class UsersEnchereService {
             texte = gson.toJson(new Message(new Success(enchere.getLastID(), "Success")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+            
         }
         return texte;
     }
@@ -64,7 +73,7 @@ public class UsersEnchereService {
             texte = gson.toJson(new Message(new Success(200, "Success")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+//            
         }
         return texte;
     }
@@ -93,34 +102,68 @@ public class UsersEnchereService {
             texte = gson.toJson(new Message(new Success(id, "Update Ok!!")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+            
         }
         return texte;
     }
 // update d'un enchere
 
     @PutMapping("/users/{id}/encheres/{idc}")
-    String update(@RequestParam double prixMin,
-            @PathVariable int idc,
-            @PathVariable int id, @RequestParam int categorieId,
-            @RequestParam String descriProduit, @RequestParam double durer) throws Exception {
+    String update(@PathVariable int id, @PathVariable int idc, HttpServletRequest rq, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+
         Gson gson = new Gson();
+        try{
+        TokenHandler tokens = new TokenHandler().ToToken(token);
+        int usersId = tokens.getUtilisateur();
+        }catch(Exception d){
+        _val_.put("error",new Fail(d.getMessage(),"404"));
+        return gson.toJson(_val_);
+        }
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
 
         try {
             Enchere enchere = new Enchere();
-            enchere.setCategorieId(categorieId);
-//            enchere.setDateDebut(dateDebut);
-            enchere.setPrixMin(prixMin);
+            if (rq.getParameter("categorieId") != null) {
+                enchere.setCategorieId(Integer.parseInt(rq.getParameter("categorieId")));
+            }
+            if (rq.getParameter("prixMin") != null) {
+                enchere.setPrixMin(Double.parseDouble((rq.getParameter("prixMin"))));
+            }
+            if (rq.getParameter("durer") != null) {
+                enchere.setDurer(Double.parseDouble((rq.getParameter("durer"))));
+            }
+
+            if (rq.getParameter("descriProduit") != null) {
+                enchere.setDescriProduit(rq.getParameter("descriProduit"));
+
+            }
             enchere.setUsersId(id);
-            enchere.setDescriProduit(descriProduit);
-            enchere.setDurer(durer);
-            enchere.setId(id);
+            enchere.setId(idc);
             enchere.update("id", null);
             texte = gson.toJson(new Message(new Success(id, "Update Ok!!")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+//            
+        }
+        return texte;
+    }
+
+    @PostMapping("/users/{id}/encheres/{idc}/addPic")
+    String updatePic(@PathVariable int id, @PathVariable int idc, @RequestParam String photo) throws Exception {
+        Gson gson = new Gson();
+        String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
+
+        try {
+            EncherePhoto o = new EncherePhoto();
+            o.setEnchereId(idc);
+            o.setPIC(photo);
+//            o.setPhoto(photo.toString());
+//            o.insert(null);
+            texte = gson.toJson(new Message(new Success(id, "Insert Ok!!")));
+        } catch (Exception ex) {
+            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//         /   
         }
         return texte;
     }
@@ -128,22 +171,40 @@ public class UsersEnchereService {
     //  get tous les encheresz
 //    ArrayList<Enchere> advancedSearch(String cle)
     @GetMapping("/users/{id}/encheres")
-    String getOne(@PathVariable int id) throws Exception {
+    String getOne(@PathVariable int id, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+
+        Gson gson = new Gson();
+        try {
+            TokenHandler tokens = new TokenHandler().ToToken(token);
+            int usersId = tokens.getUtilisateur();
+            System.err.println(usersId);
+        } catch (Exception d) {
+            _val_.put("error", new Fail(d.getMessage(), "404"));
+            return gson.toJson(_val_);
+        }
         Enchere am = new Enchere();
         am.setUsersId(id);
-        Gson gson = new Gson();
 //        String texte = gson.toJson(am.select(null));
 //        return texte;
-        HashMap _val_ = new HashMap<String, Object>();
         _val_.put("data", am.select(null));
         return gson.toJson(_val_);
     }
 
     @GetMapping("/users/{id}/encheres/search")
-    String recherhce(@PathVariable int id, HttpServletRequest request) throws Exception {
-        Enchere am = new Enchere();
-        am.setUsersId(id);
+    String recherhce(@PathVariable int id, HttpServletRequest request, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+
         Gson gson = new Gson();
+        try {
+            TokenHandler tokens = new TokenHandler().ToToken(token);
+            int usersId = tokens.getUtilisateur();
+            System.err.println(usersId);
+        } catch (Exception d) {
+            _val_.put("error", new Fail(d.getMessage(), "404"));
+            return gson.toJson(_val_);
+        }  Enchere am = new Enchere();
+        am.setUsersId(id);
         Enchere enchere = new Enchere();
         if (request.getParameter("datedebut") != null) {
             enchere.setDateDebut(request.getParameter("datedebut"));
@@ -162,7 +223,6 @@ public class UsersEnchereService {
             key = request.getParameter("cle");
         }
         ArrayList<Enchere> sera = enchere.advancedSearch(key);
-        HashMap _val_ = new HashMap<String, Object>();
         _val_.put("data", sera);
         return gson.toJson(_val_);
     }

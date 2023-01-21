@@ -14,13 +14,13 @@ import java.util.List;
  * @author dina
  */
 @InfoDAO(table = "Compte")
-public class Compte extends ObjectBDD {    
-    
+public class Compte extends ObjectBDD {
+
     private int id = -1;
     private double montant = -1;
     private int usersId;
     private String dateReload;
-    int state=-1;
+    int state = -1;
     @Ignore
     Users user;
 
@@ -39,8 +39,7 @@ public class Compte extends ObjectBDD {
     public void setState(int state) {
         this.state = state;
     }
-    
-    
+
     public double getMontant() {
         return montant;
     }
@@ -60,21 +59,33 @@ public class Compte extends ObjectBDD {
         return ii;
     }
 
+    public double getCurrentMoney() throws Exception {
+//        Compte vao = new Compte();
+        String sql = "select *from compte where state=1 and usersid=" + this.usersId + " order by id desc ";
+        System.out.println(sql);
+        List<Compte> avo = this.selectBySQL(sql, null);
+        if (avo.isEmpty() == true) {
+            return 0;
+        }
+
+        return avo.get(0).getMontant();
+    }
+
     public void insert(Connection con) throws Exception {
-        ObjectBDD bss=this.getLastObject();
-        double montant=0;
-         ArrayList<Compte> li = selectBySQL(" select  *  from compte where state=1 order by id desc limit 1", null);
-         if(li.size()>0){
-         montant=(li.get(0)).getMontant();
-         }
+        ObjectBDD bss = this.getLastObject();
+        double montant = 0;
+        ArrayList<Compte> li = selectBySQL(" select  *  from compte where state=1 and usersId=" + this.usersId + " order by id desc limit 1", null);
+        if (li.size() > 0) {
+            montant = (li.get(0)).getMontant();
+        }
         this.setMontant(montant + this.montant);
         super.insert(null);
     }
-    
+
     public void setMontant(double montant) {
         this.montant = montant;
     }
-    
+
     public int getId() {
         return this.id;
     }
@@ -86,7 +97,7 @@ public class Compte extends ObjectBDD {
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public double getNom() {
         return this.montant;
     }
@@ -102,11 +113,11 @@ public class Compte extends ObjectBDD {
     public void setUsersId(int usersId) {
         this.usersId = usersId;
     }
-    
+
     public int getUsersId() {
         return usersId;
     }
-    
+
     public String getDateReload() {
         return this.dateReload;
     }
@@ -118,5 +129,5 @@ public class Compte extends ObjectBDD {
     public void setDateReload(String dateReload) {
         this.dateReload = dateReload;
     }
-    
+
 }

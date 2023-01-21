@@ -22,14 +22,14 @@ import utils.Success;
 @RestController
 @CrossOrigin
 public class UsersController {
-    
+
     @GetMapping("/login_")
     String test() {
         Gson gson = new Gson();
         String texte = gson.toJson(new Message(new Fail("404", "Not Found")));
         return texte;
     }
-    
+
     @GetMapping("/users")
     String users() throws Exception {
         Gson gson = new Gson();
@@ -48,7 +48,7 @@ public class UsersController {
         _val_.put("data", vao.select(null));
         return gson.toJson(_val_);
     }
-    
+
     @PostMapping("/users")
     String getUsers(@RequestParam String nom, @RequestParam String prenom,
             @RequestParam String login, @RequestParam String mdp) throws Exception {
@@ -64,7 +64,7 @@ public class UsersController {
 //        String texte = gson.toJson(new Users().select(null));
         return gson.toJson(_val_);
     }
-    
+
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
     @CrossOrigin
     public String login(@RequestParam String logins, @RequestParam String pwds) throws Exception {
@@ -82,39 +82,47 @@ public class UsersController {
         }
         zateur.setId(id);
         try {
-            String oi =new TokenHandler().CreerToken(id);
+            String oi = new TokenHandler().CreerToken(id);
             _val_.put("datas", new Success(id, oi));
         } catch (Exception xc) {
             throw xc;
         }
         return gson.toJson(_val_);
     }
+
     @RequestMapping(value = "/inscription", method = RequestMethod.POST, produces = "application/json")
     @CrossOrigin
-    String logon(@RequestParam String nom,@RequestParam String prenom,@RequestParam String dtn,@RequestParam String logins, @RequestParam String pwds) throws Exception {
+    String logon(@RequestParam String nom, @RequestParam String prenom, @RequestParam String dtn, @RequestParam String logins, @RequestParam String pwds) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
         Users zateur = new Users();
-        zateur.setNom(nom);
-        zateur.setPrenom(prenom);
-        zateur.setDtn(dtn);
-        zateur.setLogin(logins);
-        zateur.setMdp(pwds);
-        zateur.insert(null);
         Gson gson = new Gson();
-        int id = zateur.getLoginId();
-        System.err.println(id);
-        String json = "";
-   
-        zateur.setId(id);
+
         try {
-            String oi =new TokenHandler().CreerToken(id);
+            zateur.setNom(nom);
+            zateur.setPrenom(prenom);
+            zateur.setDtn(dtn);
+            zateur.setLogin(logins);
+            zateur.setMdp(pwds);
+            zateur.insert(null);
+
+            Compte com = new Compte();
+            com.setUsersId(zateur.getLastID());
+//        com.setMontant(0);
+            com.insert(null);
+            int id = zateur.getLastID();
+//        System.err.println(id);
+//        String json = "";
+
+            zateur.setId(id);
+            String oi = new TokenHandler().CreerToken(id);
             _val_.put("datas", new Success(id, oi));
         } catch (Exception xc) {
-            throw xc;
+            _val_.put("datas", new Fail(xc.getMessage(), "500"));
+
         }
         return gson.toJson(_val_);
     }
-    
+
     @RequestMapping(value = "/checkTokens", method = RequestMethod.GET, produces = "application/json")
     HashMap<String, Object> logins(@RequestHeader String login) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
@@ -127,7 +135,7 @@ public class UsersController {
             throw xc;
         }
         _val_.put("datas", new Success(200, "Ok"));
-        
+
         return _val_;
     }
 

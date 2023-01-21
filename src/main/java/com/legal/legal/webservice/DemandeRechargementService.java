@@ -25,20 +25,22 @@ public class DemandeRechargementService {
 
     @PostMapping("/users/{id}/demandes")
     String Create(@RequestParam double montant,
-            @PathVariable int id) throws Exception {
+            @PathVariable int id,@RequestHeader String token) throws Exception {
         Gson gson = new Gson();
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
-
+       
         try {
+         TokenHandler tokens = new TokenHandler().ToToken(token);;
             DemandeRechargement demn=new DemandeRechargement();
             demn.setState(0);
             demn.setMontant(montant);
             demn.setUsersId(id);
             demn.insert(null);
             texte = gson.toJson(new Message(new Success(demn.getLastID(), "Success")));
+            return texte;
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+//            throw ex;
         }
         return texte;
     }

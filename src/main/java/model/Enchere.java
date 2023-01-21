@@ -36,7 +36,6 @@ public class Enchere extends ObjectBDD {
     Users userGagnant;
     @Ignore
     Categorie cat;
-
     @Ignore
     private int nbPersonne;
     @Ignore
@@ -278,6 +277,7 @@ public class Enchere extends ObjectBDD {
         System.out.println("New Date : " + newDate);
         return newDate.toString().replace("T", " ");
     }
+    
 
     public int getId() {
         return this.id;
@@ -301,6 +301,7 @@ public class Enchere extends ObjectBDD {
      * @param prixMin
      */
     public void setPrixMin(double prixMin) {
+//        if()
         this.prixMin = prixMin;
     }
 
@@ -384,7 +385,19 @@ public class Enchere extends ObjectBDD {
      *
      * @param durer
      */
-    public void setDurer(double durer) {
+    public void setDurer(double durer) throws Exception {
+        Parametrage test = new Parametrage();
+        test.setId(2);
+        Parametrage trage = (Parametrage) test.getLast(null);
+        if(durer>Integer.parseInt(trage.getValue())){
+        throw new Exception("Durer trop long");
+        }
+        test=new Parametrage();
+        test.setId(4);
+        trage = (Parametrage) test.getLast(null);
+        if(durer<Integer.parseInt(trage.getValue())){
+        throw new Exception("Durer trop court");
+        }
         this.durer = durer;
     }
 
@@ -402,11 +415,14 @@ public class Enchere extends ObjectBDD {
                     + "group by enchereid\n"
                     + ")";
             System.out.println(sql);
+            
             PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
 
                 users.setId(resultSet.getInt("usersid"));
+                            users=users.getUsers();
+
                 users.setMiseGagnant(resultSet.getDouble("prixmise"));
 
             }

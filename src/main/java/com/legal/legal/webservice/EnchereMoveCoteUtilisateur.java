@@ -29,9 +29,10 @@ public class EnchereMoveCoteUtilisateur {
 
     @PostMapping("encheres/{id}/enchereMoves")
     String Create(@RequestParam double prixMise,
-            @PathVariable int id, @RequestParam int usersId, @RequestHeader String token) throws Exception {
+            @PathVariable int id, @RequestHeader String token) throws Exception {
         TokenHandler tokens = new TokenHandler().ToToken(token);
         Gson gson = new Gson();
+        int usersId = tokens.getUtilisateur();
         Connection con = Connexion.getConn();
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
         EnchereMove moves = new EnchereMove();
@@ -45,9 +46,10 @@ public class EnchereMoveCoteUtilisateur {
             return texte;
 //            throw new Exception("Vous ne pouvez pas participer a votre propre enchere");
         }
-        moves.setUsersId(usersId);
-        moves.setPrixMise(prixMise);
         try {
+
+            moves.setUsersId(usersId);
+            moves.setPrixMise(prixMise);
             EnchereMove.setTransaction(moves, id);
             texte = gson.toJson(new Message(new Success(moves.lastMove(con).getId(), "Success")));
         } catch (Exception ex) {

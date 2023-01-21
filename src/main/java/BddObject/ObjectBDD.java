@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -117,7 +118,7 @@ public class ObjectBDD {
         Statement stmt = null;
         try {
             connect = Connexion.getConn();
-            stmt = connect.createStatement();   
+            stmt = connect.createStatement();
             stmt.executeUpdate("SET DATEFORMAT ymd ");
 
             stmt.executeUpdate(st);
@@ -129,8 +130,9 @@ public class ObjectBDD {
         }
 
     }
-    public String update(String primary)throws Exception{
-        if(primary==null){
+
+    public String update(String primary) throws Exception {
+        if (primary == null) {
             throw new Exception("id to Update is not set");
         }
         if (primary.equals("") == true) {
@@ -156,11 +158,11 @@ public class ObjectBDD {
                 Field atts = this.getClass().getDeclaredField(h);
                 Ignore att_f = (Ignore) atts.getAnnotation(Ignore.class
                 );
-                  UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
-                    );
-                    
+                UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
+                );
+
 //                
-                    if (att_f == null && ats==null) {
+                if (att_f == null && ats == null) {
                     if (method[i].invoke(objet) != null && method[i].invoke(objet).equals(-1) == false && method[i].invoke(objet).equals(-1.0) == false) {
                         if (attri[i].toUpperCase().equals(primary.toUpperCase())) {
                             //	exp=exp+attri[i]+"='"+method[i].invoke(objet)+"',";
@@ -230,6 +232,24 @@ public class ObjectBDD {
         }
     }
 
+      public Object getLast(Connection con) throws Exception {
+        ArrayList l = this.select(con);
+        return l.get(this.select(con).size()-1);
+    }
+
+
+    public int count(Connection connect) throws Exception {
+        String st = "select count(*)as is from " + this.getClass().getSimpleName();
+        Statement stmt = connect.createStatement();
+        ResultSet res = stmt.executeQuery(st);
+        ResultSetMetaData resultMeta = res.getMetaData();
+        int r = 0;
+        while (res.next()) {
+            r = res.getInt("is");
+        }
+        return r;
+    }
+
     public ArrayList select(Connection connect) throws Exception {
         Vector vect = new Vector();
         Object objet = this;
@@ -270,10 +290,10 @@ public class ObjectBDD {
                 Ignore att_f = (Ignore) atts.getAnnotation(Ignore.class
                 );
                 UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
-                    );
-                    
+                );
+
 //                
-                    if (att_f == null && ats==null) {
+                if (att_f == null && ats == null) {
                     if (method[i].invoke(objet) != null && method[i].invoke(objet).equals(-1) == false && method[i].invoke(objet).equals(-1.0) == false)//&&method[i].invoke(objet)=)
                     {
                         misyWhere = true;
@@ -336,11 +356,11 @@ public class ObjectBDD {
                     Field atts = this.getClass().getDeclaredField(h);
                     Ignore att_f = (Ignore) atts.getAnnotation(Ignore.class
                     );
-                  UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
+                    UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
                     );
-                    
+
 //                
-                    if (att_f == null && ats==null) {
+                    if (att_f == null && ats == null) {
                         {
                             String[] vol = fiel[u].getName().split(Character.toString(fiel[u].getName().toCharArray()[0]));
                             String prime = Character.toString(fiel[u].getName().toCharArray()[0]).toUpperCase();
@@ -360,7 +380,7 @@ public class ObjectBDD {
                             } else if (fiel[u].getType().getSimpleName().equals("int")) {
                                 Object ob = res.getInt(fiel[u].getName());
 //                          
-                                Method miset = objet.getClass().getMethod("set" + st2,fiel[u].getType());
+                                Method miset = objet.getClass().getMethod("set" + st2, fiel[u].getType());
                                 miset.invoke(nouveau, ob);
                             } //                            
                             else if (fiel[u].getType().getSimpleName().equals("Integer")) {
@@ -459,12 +479,15 @@ public class ObjectBDD {
     }
 
     public ObjectBDD getLastObject() throws Exception {
-        Object obj=new ObjectBDD();
+        Object obj = new ObjectBDD();
         ArrayList li = selectBySQL(" select  *  from " + this.getClass().getSimpleName() + " order by id desc limit 1", null);
-        if(li.size()==0){return (ObjectBDD)obj; }else{
-        obj = li.get(0);
-        Method m = li.get(0).getClass().getMethod("getId");
-        int g = (int) m.invoke(obj);}
+        if (li.size() == 0) {
+            return (ObjectBDD) obj;
+        } else {
+            obj = li.get(0);
+            Method m = li.get(0).getClass().getMethod("getId");
+            int g = (int) m.invoke(obj);
+        }
         return (ObjectBDD) obj;
     }
 
@@ -519,11 +542,11 @@ public class ObjectBDD {
                     Field atts = this.getClass().getDeclaredField(h);
                     Ignore att_f = (Ignore) atts.getAnnotation(Ignore.class
                     );
-                     UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
+                    UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
                     );
-                    
+
 //                
-                    if (att_f == null && ats==null) {
+                    if (att_f == null && ats == null) {
                         {
                             String[] vol = fiel[u].getName().split(Character.toString(fiel[u].getName().toCharArray()[0]));
                             String prime = Character.toString(fiel[u].getName().toCharArray()[0]).toUpperCase();
@@ -543,7 +566,7 @@ public class ObjectBDD {
                             } else if (fiel[u].getType().getSimpleName().equals("int")) {
                                 Object ob = res.getInt(fiel[u].getName());
 //                            System.out.println(fiel[u].getName());
-                                Method miset = objet.getClass().getMethod("set" + st2,  fiel[u].getType());
+                                Method miset = objet.getClass().getMethod("set" + st2, fiel[u].getType());
                                 miset.invoke(nouveau, ob);
                             } //                            
                             else if (fiel[u].getType().getSimpleName().equals("Integer")) {
@@ -732,6 +755,7 @@ public class ObjectBDD {
         }
         return valiny;
     }
+
     public void update(String primary, Connection connect) throws Exception {
         String st = update(primary);
         System.out.println(st);
@@ -882,11 +906,11 @@ public class ObjectBDD {
                 Field atts = this.getClass().getDeclaredField(attri[i].toLowerCase());
                 Ignore att_f = (Ignore) atts.getAnnotation(Ignore.class
                 );
-  UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
-                    );
-                    
+                UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
+                );
+
 //                
-                    if (att_f == null && ats==null) {
+                if (att_f == null && ats == null) {
 
                     if (method[i].invoke(objet) != null && method[i].invoke(objet).equals(-1) == false)//&&method[i].invoke(objet)=)
                     {
@@ -1018,11 +1042,11 @@ public class ObjectBDD {
                 Ignore att_f = (Ignore) atts.getAnnotation(Ignore.class
                 );
 
-                 UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
-                    );
-                    
+                UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
+                );
+
 //                
-                    if (att_f == null && ats==null) {
+                if (att_f == null && ats == null) {
 
                     if (attri[i].toUpperCase().equals("Id".toUpperCase())) {
                     }
@@ -1092,16 +1116,18 @@ public class ObjectBDD {
             Field atts = this.getClass().getDeclaredField(h);
             Ignore att_f = (Ignore) atts.getAnnotation(Ignore.class
             );
-             UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
-                    );
-                    
+            UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
+            );
+
 //                
-                    if (att_f == null && ats==null) {
+            if (att_f == null && ats == null) {
                 met[i] = this.getClass().getMethod(n + str);
             }
         }
         return met;
-    }public Method[] getMethodByNameAgregat(String n) throws Exception {
+    }
+
+    public Method[] getMethodByNameAgregat(String n) throws Exception {
         String[] attr = this.getAllFields();
         Method[] met = new Method[attr.length];
         Method[] methodses = this.getClass().getMethods();
@@ -1132,14 +1158,14 @@ public class ObjectBDD {
             String[] vol = str.split(Character.toString(str.toCharArray()[0]));
             String prime = Character.toString(str.toCharArray()[0]).toUpperCase();
             String h = prime.toLowerCase() + str.substring(1, str.toCharArray().length);
-             Field atts = ob.getClass().getDeclaredField(h);
+            Field atts = ob.getClass().getDeclaredField(h);
             Ignore att_f = (Ignore) atts.getAnnotation(Ignore.class
             );
-             UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
-                    );
-                    
+            UnColumn ats = (UnColumn) atts.getAnnotation(UnColumn.class
+            );
+
 //                
-                    if (att_f == null && ats==null) {
+            if (att_f == null && ats == null) {
                 met[i] = ob.getClass().getMethod(n + str);
             }
 

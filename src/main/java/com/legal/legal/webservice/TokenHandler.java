@@ -18,7 +18,7 @@ import io.jsonwebtoken.Claims;
 public class TokenHandler {
 
     public static final long DateEXP = 10000000;
-    public static final String keyToken = "awerty10";
+    public static final String keyToken = "qazwsxedcrfvtgbyhnujmik";
 
     int id;
     String token;
@@ -96,7 +96,7 @@ public class TokenHandler {
             token.setUtilisateur(idutilisateur);
             token.setToken(tok);
         } catch (Exception f) {
-            throw f;
+            throw new Exception("Please, return login");
         }
         return token;
     }

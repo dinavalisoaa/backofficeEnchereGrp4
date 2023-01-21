@@ -21,7 +21,12 @@ public class EnchereClose extends ObjectBDD {
 	public String getDateClose() {
 		return this.dateClose;
 	}
-
+public Enchere getEnchere() throws Exception {
+//    ArrayList<Enchere>vao=()
+        Enchere tt = new Enchere();
+        tt.setId(this.enchereId);
+        return ((Enchere) tt.select(null).get(0));
+    }
 	/**
 	 * 
 	 * @param dateClose

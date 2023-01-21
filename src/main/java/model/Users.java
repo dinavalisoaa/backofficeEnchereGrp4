@@ -9,11 +9,14 @@ import BddObject.Ignore;
 import BddObject.InfoDAO;
 import BddObject.ObjectBDD;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  *
@@ -47,7 +50,17 @@ public class Users extends ObjectBDD {
         return dtn;
     }
 
-    public void setDtn(String dtn) {
+    public void setDtn(String dtn) throws Exception {
+        Date vao = Date.valueOf(dtn);//.getYear();
+        Calendar cal = Calendar.getInstance();
+        Date now = Date.valueOf(LocalDate.now());
+        int ch = now.getYear() - vao.getYear();
+        Parametrage test = new Parametrage();
+        test.setId(3);
+        Parametrage trage = (Parametrage) test.getLast(null);
+        if(ch<Integer.parseInt(trage.getValue())){
+        throw new Exception("Age minimum non respecter");
+        }
         this.dtn = dtn;
     }
 
@@ -79,7 +92,7 @@ public class Users extends ObjectBDD {
         cpt.setUsersId(id);
         double montant = 0;
         try {
-            montant = ((Compte) cpt.getLastObject()).getMontant();
+            montant = ((Compte) cpt.getLast(null)).getMontant();
         } catch (Exception e) {
         }
         return montant;

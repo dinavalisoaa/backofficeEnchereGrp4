@@ -26,15 +26,21 @@ public class EnchereMoveUsersService {
 
     @GetMapping("users/{idusers}/encheres/{id}/enchereMoves")
     String Create(
-            @PathVariable int idusers, @PathVariable int id) throws Exception {
+            @PathVariable int idusers, @PathVariable int id, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
 
-//        TokenHandler han = new TokenHandler().ToToken(token);
         Gson gson = new Gson();
+        try{
+        TokenHandler tokens = new TokenHandler().ToToken(token);
+        int usersId = tokens.getUtilisateur();
+        }catch(Exception d){
+        _val_.put("error",new Fail(d.getMessage(),"404"));
+        return gson.toJson(_val_);
+        }
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
         EnchereMove move = new EnchereMove();
         move.setUsersId(idusers);
         move.setEnchereId(id);
-        HashMap _val_ = new HashMap<String, Object>();
         ArrayList<EnchereMove> all = new ArrayList<>();
         ArrayList<EnchereMove> alls = move.select(null);
         for (int i = 0; i < alls.size(); i++) {
@@ -54,14 +60,24 @@ public class EnchereMoveUsersService {
 
 //get un mouvements d'enchere sur mes enchere 
     @GetMapping("users/{idusers}/encheres/{id}/enchereMoves/{idm}")
-    String gethOne(@PathVariable int id, @PathVariable int idusers, @PathVariable int idm) throws Exception {
+    String gethOne(@PathVariable int id, @PathVariable int idusers, @PathVariable int idm, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+
+        Gson gson = new Gson();
+        try{
+        TokenHandler tokens = new TokenHandler().ToToken(token);
+        int usersId = tokens.getUtilisateur();
+        }catch(Exception d){
+        _val_.put("error",new Fail(d.getMessage(),"404"));
+        return gson.toJson(_val_);
+        }
         EnchereMove am = new EnchereMove();
         am.setId(idm);
         am.setEnchereId(id);
         am.setUsersId(id);
-        Gson gson = new Gson();
+//        Gson gson = new Gson();
 //        String texte = gson.toJson(am.select(null));
-        HashMap _val_ = new HashMap<String, Object>();
+//        HashMap _val_ = new HashMap<String, Object>();
         ArrayList<EnchereMove> all = new ArrayList<>();
         ArrayList<EnchereMove> alls = am.select(null);
         for (int i = 0; i < alls.size(); i++) {

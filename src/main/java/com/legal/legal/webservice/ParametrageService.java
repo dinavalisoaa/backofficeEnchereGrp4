@@ -39,7 +39,7 @@ demn.setValue(value);
             texte = gson.toJson(new Message(new Success(demn.getLastID(), "Success")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+            
         }
         return texte;
     }
@@ -58,7 +58,21 @@ demn.setValue(value);
             texte = gson.toJson(new Message(new Success(id, "Update OK!!")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+            
+        }
+        return texte;
+    }
+   @GetMapping("commissions")
+    String pradaf() throws Exception {
+        Gson gson = new Gson();
+        String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
+             HashMap _val_ = new HashMap<String, Object>();
+             _val_.put("commission",new Commission().getCurrentId().getTaux());
+        try {
+            texte = gson.toJson(_val_);
+        } catch (Exception ex) {
+            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            
         }
         return texte;
     }
@@ -68,7 +82,6 @@ demn.setValue(value);
         Gson gson = new Gson();
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
              HashMap _val_ = new HashMap<String, Object>();
-
         try {
             Parametrage demn=new Parametrage();
             demn.setId(id);
@@ -76,7 +89,7 @@ demn.setValue(value);
             texte = gson.toJson(new Message(new Success(id, "Update OK!!")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+            
         }
         return gson.toJson(_val_);
     }
@@ -91,7 +104,7 @@ demn.setValue(value);
         _val_.put("data", demn.select(null));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            throw ex;
+            
         }
         return gson.toJson(_val_);
     }

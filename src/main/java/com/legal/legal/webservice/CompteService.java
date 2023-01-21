@@ -56,6 +56,16 @@ public class CompteService {
 //        String texte = gson.toJson(new Users().select(null));
         return gson.toJson(_val_);
     }
+      @GetMapping("/users/{id}/comptes/currentsolde")
+    String etat(@PathVariable int id) throws Exception {
+        Gson gson = new Gson();
+        HashMap _val_ = new HashMap<String, Object>();
+        Compte vao = new Compte();
+        vao.setUsersId(id);
+//        vao.set
+        _val_.put("data",vao.getCurrentMoney());
+        return gson.toJson(_val_);
+    }
 //
 //    //update un encheres adjuger
 //    @PutMapping("/users/{id}/encheres/{idc}/ajd")

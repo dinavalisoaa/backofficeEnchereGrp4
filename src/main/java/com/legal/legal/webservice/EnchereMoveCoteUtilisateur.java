@@ -31,8 +31,9 @@ public class EnchereMoveCoteUtilisateur {
     String Create(@RequestParam double prixMise,
             @PathVariable int id, @RequestHeader String token) throws Exception {
         TokenHandler tokens = new TokenHandler().ToToken(token);
-        Gson gson = new Gson();
         int usersId = tokens.getUtilisateur();
+        Gson gson = new Gson();
+
         Connection con = Connexion.getConn();
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
         EnchereMove moves = new EnchereMove();

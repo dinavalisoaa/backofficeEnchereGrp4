@@ -92,7 +92,8 @@ public class UsersController {
 
     @RequestMapping(value = "/inscription", method = RequestMethod.POST, produces = "application/json")
     @CrossOrigin
-    String logon(@RequestParam String nom, @RequestParam String prenom, @RequestParam String dtn, @RequestParam String logins, @RequestParam String pwds) throws Exception {
+    String logon(@RequestParam String nom, @RequestParam String prenom, @RequestParam String dtn,
+            @RequestParam String email, @RequestParam String pwds, @RequestParam String genreid) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
         Users zateur = new Users();
         Gson gson = new Gson();
@@ -101,8 +102,9 @@ public class UsersController {
             zateur.setNom(nom);
             zateur.setPrenom(prenom);
             zateur.setDtn(dtn);
-            zateur.setLogin(logins);
+            zateur.setLogin(email);
             zateur.setMdp(pwds);
+            zateur.setGenreid(Integer.parseInt(genreid));
             zateur.insert(null);
 
             Compte com = new Compte();
@@ -118,9 +120,9 @@ public class UsersController {
             _val_.put("datas", new Success(id, oi));
         } catch (Exception xc) {
             _val_.put("datas", new Fail(xc.getMessage(), "500"));
-
+        } finally {
+            return gson.toJson(_val_);
         }
-        return gson.toJson(_val_);
     }
 
     @RequestMapping(value = "/checkTokens", method = RequestMethod.GET, produces = "application/json")

@@ -135,7 +135,9 @@
                         <div class="row mt">
                             <div class="col-md-12">
                                 <div class="content-panel">
-                                    <h2>Taux en cours:<%=new Commission().getCurrentId().getTaux()%>%</h2>
+                                    <h2>Taux en cours:<%
+                                            
+                                        new Commission().getCurrentId().getTaux()%>%</h2>
                                         <table style="width:80%" border="1" class="table table-striped table-responsive-md">
                                             <thead>
                                                 <tr>

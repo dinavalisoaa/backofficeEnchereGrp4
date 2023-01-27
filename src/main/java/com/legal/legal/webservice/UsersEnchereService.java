@@ -1,9 +1,11 @@
 package com.legal.legal.webservice;
 
+import BddObject.Connexion;
 import java.util.List;
 import java.util.ArrayList;
 import model.*;
 import com.google.gson.*;
+import java.sql.Connection;
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.SpringApplication;
@@ -41,7 +43,7 @@ public class UsersEnchereService {
             return gson.toJson(_val_);
         }
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
-
+        Connection con = null;
         try {
             Enchere enchere = new Enchere();
             enchere.setCategorieId(categorieId);
@@ -49,13 +51,30 @@ public class UsersEnchereService {
             enchere.setPrixMin(prixMin);
             enchere.setUsersId(id);
             enchere.setDescriProduit(descriProduit);
+            Parametrage test = new Parametrage();
+            test.setId(2);
+            con = Connexion.getConn();
+            Parametrage trage = (Parametrage) test.select(con).get(0);//getLast(con);
+            if (durer > Integer.parseInt(trage.getValue())) {
+                throw new Exception("Durer trop long");
+            }
+            test = new Parametrage();
+            test.setId(4);
+            trage = (Parametrage) test.select(con).get(0);
+            if (durer < Integer.parseInt(trage.getValue())) {
+                throw new Exception("Durer trop court");
+            }
             enchere.setDurer(durer);
-            enchere.insert(null);
+            enchere.insert(con);
             texte = gson.toJson(new Message(new Success(enchere.getLastID(), "Success")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            
+
+        } finally {
+            con.close();;
+
         }
+
         return texte;
     }
 
@@ -102,7 +121,7 @@ public class UsersEnchereService {
             texte = gson.toJson(new Message(new Success(id, "Update Ok!!")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-            
+
         }
         return texte;
     }
@@ -113,12 +132,12 @@ public class UsersEnchereService {
         HashMap _val_ = new HashMap<String, Object>();
 
         Gson gson = new Gson();
-        try{
-        TokenHandler tokens = new TokenHandler().ToToken(token);
-        int usersId = tokens.getUtilisateur();
-        }catch(Exception d){
-        _val_.put("error",new Fail(d.getMessage(),"404"));
-        return gson.toJson(_val_);
+        try {
+            TokenHandler tokens = new TokenHandler().ToToken(token);
+            int usersId = tokens.getUtilisateur();
+        } catch (Exception d) {
+            _val_.put("error", new Fail(d.getMessage(), "404"));
+            return gson.toJson(_val_);
         }
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
 
@@ -203,7 +222,8 @@ public class UsersEnchereService {
         } catch (Exception d) {
             _val_.put("error", new Fail(d.getMessage(), "404"));
             return gson.toJson(_val_);
-        }  Enchere am = new Enchere();
+        }
+        Enchere am = new Enchere();
         am.setUsersId(id);
         Enchere enchere = new Enchere();
         if (request.getParameter("datedebut") != null) {

@@ -233,7 +233,9 @@
                             <!-- /MAIN CONTENT -->
                             <!--main content end-->
                             <!--footer start-->
+                            <%
                             
+                            %>
                             <!--footer end-->
                             </section>
                             <!-- js placed at the end of the document so the pages load faster -->

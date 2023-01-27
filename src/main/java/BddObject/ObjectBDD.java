@@ -234,7 +234,7 @@ public class ObjectBDD {
 
       public Object getLast(Connection con) throws Exception {
         ArrayList l = this.select(con);
-        return l.get(this.select(con).size()-1);
+        return l.get(l.size()-1);
     }
 
 

@@ -46,7 +46,19 @@ public class Enchere extends ObjectBDD {
     Users user;
     @Ignore 
     double rentabilite;
+    @Ignore
+    ArrayList photo;
 
+    public ArrayList getPhoto() throws Exception {
+        EncherePhoto kk=new EncherePhoto();
+       kk.setEnchereId(this.id);
+       return kk.select(null);
+    }
+
+    public void setPhoto(ArrayList photo) {
+        this.photo = photo;
+    }
+    
     public double getRentabilite() {
         return rentabilite;
     }
@@ -386,18 +398,7 @@ public class Enchere extends ObjectBDD {
      * @param durer
      */
     public void setDurer(double durer) throws Exception {
-        Parametrage test = new Parametrage();
-        test.setId(2);
-        Parametrage trage = (Parametrage) test.getLast(null);
-        if(durer>Integer.parseInt(trage.getValue())){
-        throw new Exception("Durer trop long");
-        }
-        test=new Parametrage();
-        test.setId(4);
-        trage = (Parametrage) test.getLast(null);
-        if(durer<Integer.parseInt(trage.getValue())){
-        throw new Exception("Durer trop court");
-        }
+      
         this.durer = durer;
     }
 

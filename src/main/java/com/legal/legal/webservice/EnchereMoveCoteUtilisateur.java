@@ -30,12 +30,21 @@ public class EnchereMoveCoteUtilisateur {
     @PostMapping("encheres/{id}/enchereMoves")
     String Create(@RequestParam double prixMise,
             @PathVariable int id, @RequestHeader String token) throws Exception {
-        TokenHandler tokens = new TokenHandler().ToToken(token);
-        int usersId = tokens.getUtilisateur();
         Gson gson = new Gson();
 
         Connection con = Connexion.getConn();
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
+
+        TokenHandler tokens = new TokenHandler();
+        try {
+            tokens = tokens.ToToken(token);
+
+        } catch (Exception e) {
+            texte = gson.toJson(new Message(new Fail("500", e.getMessage())));
+
+            return texte;
+        }
+        int usersId = tokens.getUtilisateur();
         EnchereMove moves = new EnchereMove();
         moves.setEnchereId(id);
         Enchere enc = new Enchere();

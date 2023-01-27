@@ -124,19 +124,20 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/checkTokens", method = RequestMethod.GET, produces = "application/json")
-    HashMap<String, Object> logins(@RequestHeader String login) throws Exception {
-        HashMap _val_ = new HashMap<String, Object>();
+    String logins(@RequestHeader String token) throws Exception {
+        TokenHandler tokens = new TokenHandler();
+        String texte = "";
+        Gson gson = new Gson();
         try {
-            if (new TokenUtil().isTokenExpired(login)) {
-                _val_.put("datas", (new Fail("Exp", "404")));
-                return _val_;
-            }
-        } catch (Exception xc) {
-            throw xc;
-        }
-        _val_.put("datas", new Success(200, "Ok"));
+            tokens = tokens.ToToken(token);
 
-        return _val_;
+        } catch (Exception e) {
+            texte = gson.toJson(new Message(new Fail("500", e.getMessage())));
+        }
+//        _val_.put("datas", new Success(200, "Ok"));
+        texte = gson.toJson(new Message(new Success(200,"OK")));
+
+        return texte;
     }
 
     /*

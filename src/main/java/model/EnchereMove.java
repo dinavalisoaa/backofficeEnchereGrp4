@@ -102,6 +102,9 @@ public class EnchereMove extends ObjectBDD {
     public EnchereMove getEnchereMove() throws Exception {
         EnchereMove us = new EnchereMove();
         us.setId(this.id);
+        ArrayList j=us.select(null);
+        if(j.isEmpty())return null;
+        
         return ((EnchereMove) us.select(null).get(0));
     }
 

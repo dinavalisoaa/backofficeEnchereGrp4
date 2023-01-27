@@ -55,12 +55,12 @@ public class Users extends ObjectBDD {
         Calendar cal = Calendar.getInstance();
         Date now = Date.valueOf(LocalDate.now());
         int ch = now.getYear() - vao.getYear();
-        Parametrage test = new Parametrage();
-        test.setId(3);
-        Parametrage trage = (Parametrage) test.getLast(null);
-        if(ch<Integer.parseInt(trage.getValue())){
-        throw new Exception("Age minimum non respecter");
-        }
+//        Parametrage test = new Parametrage();
+//        test.setId(3);
+//        Parametrage trage = (Parametrage) test.select(null).get(0);
+//        if(ch<Integer.parseInt(trage.getValue())){
+//        throw new Exception("Age minimum non respecter");
+//        }
         this.dtn = dtn;
     }
 

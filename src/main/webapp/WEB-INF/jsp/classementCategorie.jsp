@@ -167,7 +167,8 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% for(int i=0;i<ccat.size();i++){ %>
+                                                <% Categorie
+                                                        for(int i=0;i<ccat.size();i++){ %>
                                                 <tr>
                                                     <td><%=ccat.get(i).getNom()%></td>
                                                     <td><%=ccat.get(i).getChiffreAffaire()%>AR</td>

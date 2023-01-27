@@ -26,7 +26,6 @@ import utils.Success;
 public class EnchereService {
 //creer son propres en Encheres
 
-    
     //  get tous les encheresz
     @GetMapping("encheres")
     String getALl() throws Exception {
@@ -34,53 +33,60 @@ public class EnchereService {
 //        am.setUser/sId(id);
         Gson gson = new Gson();
         String texte = gson.toJson(am.select(null));
-         HashMap _val_ = new HashMap<String, Object>();
-         ArrayList<Enchere> all = new ArrayList<>();
-            ArrayList<Enchere> alls =am.select(null);
-            for (int i = 0; i < alls.size(); i++) {
-                Enchere get = alls.get(i);
-                Users vo = new Users();
-                vo.setId(get.getUsersId());
-                Categorie gorie=new Categorie();
-                gorie.setId(get.getCategorieId());
-                get.setCat(gorie.getCategorie());
-                get.setUser(vo.getUsers());
-                all.add(get);
-            }
-       _val_.put("data",all);
+        HashMap _val_ = new HashMap<String, Object>();
+        ArrayList<Enchere> all = new ArrayList<>();
+        ArrayList<Enchere> alls = am.select(null);
+        for (int i = 0; i < alls.size(); i++) {
+            Enchere get = alls.get(i);
+            Users vo = new Users();
+            vo.setId(get.getUsersId());
+            Categorie gorie = new Categorie();
+            gorie.setId(get.getCategorieId());
+            get.setCat(gorie.getCategorie());
+            get.setUser(vo.getUsers()); 
+            get.setPhoto(get.getPhoto());
+            all.add(get);
+        }
+        _val_.put("data", all);
         return gson.toJson(_val_);
 //        return texte;
     }
-   @GetMapping("encheres/{id}")
+
+    @GetMapping("encheres/{id}")
     String getOnes(@PathVariable int id) throws Exception {
         Enchere am = new Enchere();
         am.setId(id);
         Gson gson = new Gson();
-         HashMap _val_ = new HashMap<String, Object>();
-         ArrayList<Enchere> all = new ArrayList<>();
-            ArrayList<Enchere> alls =am.select(null);
-            for (int i = 0; i < alls.size(); i++) {
-                Enchere get = alls.get(i);
-                Users vo = new Users();
-                vo.setId(get.getUsersId());
-                Categorie gorie=new Categorie();
-                gorie.setId(get.getCategorieId());
-                get.setCat(gorie.getCategorie());
-                get.setUser(vo.getUsers());
-                all.add(get);
-            }
-       _val_.put("data",all);
+        HashMap _val_ = new HashMap<String, Object>();
+        ArrayList<Enchere> all = new ArrayList<>();
+        EncherePhoto pho = new EncherePhoto();
+        pho.setEnchereId(id);
+        ArrayList<Enchere> alls = am.select(null);
+        for (int i = 0; i < alls.size(); i++) {
+            Enchere get = alls.get(i);
+            Users vo = new Users();
+            vo.setId(get.getUsersId());
+            Categorie gorie = new Categorie();
+            gorie.setId(get.getCategorieId());
+            get.setCat(gorie.getCategorie());
+            get.setUser(vo.getUsers());
+            all.add(get);
+        }
+        _val_.put("data", all);
+//        _val_.put("photo", pho.select(null));
+        
         return gson.toJson(_val_);
     }
+
     @GetMapping("encheres/{id}/gagnant")
     String getGagnatn(@PathVariable int id) throws Exception {
         Enchere am = new Enchere();
         am.setId(id);
-        am=am.getEnchere();
+        am = am.getEnchere();
 //        am.getGagnant();
         Gson gson = new Gson();
-         HashMap _val_ = new HashMap<String, Object>();
-         am.setUserGagnant(am.getGagnant());
+        HashMap _val_ = new HashMap<String, Object>();
+        am.setUserGagnant(am.getGagnant());
 //         ArrayList<Enchere> all = new ArrayList<>();
 //            ArrayList<Enchere> alls =am.select(null);
 //            for (int i = 0; i < alls.size(); i++) {
@@ -93,31 +99,33 @@ public class EnchereService {
 //                get.setUserGagnant(vo.getUsers());
 //                all.add(get);
 //            }
-       _val_.put("data",am);
+        _val_.put("data", am);
         return gson.toJson(_val_);
-    
+        
     }
+
     @PostMapping("encheres/{id}/close")
     String close(@PathVariable int id) throws Exception {
         EnchereClose am = new EnchereClose();
         am.setEnchereId(id);
         am.setDateClose(LocalDate.now().toString());
-        MongoRepository mon=new MongoRepository();
+        MongoRepository mon = new MongoRepository();
         mon.Create(am);
         Gson gson = new Gson();
-         HashMap _val_ = new HashMap<String, Object>();
-         _val_.put("val",mon.List());
+        HashMap _val_ = new HashMap<String, Object>();
+        _val_.put("val", mon.List());
 //       _val_.put("data",new Fail(Boolean.toString(am.isExpirer()), "200"));
         return gson.toJson(_val_);
     }
-     @GetMapping("encheres/{id}/etatexp")
+
+    @GetMapping("encheres/{id}/etatexp")
     String getExp(@PathVariable int id) throws Exception {
         Enchere am = new Enchere();
         am.setId(id);
-        am=am.getEnchere();
+        am = am.getEnchere();
         Gson gson = new Gson();
-         HashMap _val_ = new HashMap<String, Object>();
-       _val_.put("data",new Fail(Boolean.toString(am.isExpirer()), "200"));
+        HashMap _val_ = new HashMap<String, Object>();
+        _val_.put("data", new Fail(Boolean.toString(am.isExpirer()), "200"));
         return gson.toJson(_val_);
     }
     

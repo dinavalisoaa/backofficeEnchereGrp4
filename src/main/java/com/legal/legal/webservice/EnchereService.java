@@ -43,13 +43,50 @@ public class EnchereService {
             Categorie gorie = new Categorie();
             gorie.setId(get.getCategorieId());
             get.setCat(gorie.getCategorie());
-            get.setUser(vo.getUsers()); 
-            get.setPhoto(get.getPhoto());
+            get.setUser(vo.getUsers());
+//            get.setPhoto(get.getPhoto());
             all.add(get);
         }
         _val_.put("data", all);
         return gson.toJson(_val_);
 //        return texte;
+    }
+// select *From categorie where id in (select categorieid from enchere where usersid=2)
+
+    @GetMapping("categories/{id}/encheres")
+    String categeEchere(@PathVariable int id) throws Exception {
+        Enchere am = new Enchere();
+        am.setCategorieId(id);
+        Gson gson = new Gson();
+        HashMap _val_ = new HashMap<String, Object>();
+        ArrayList<Enchere> all = new ArrayList<>();
+        ArrayList<Enchere> alls = am.select(null);
+        for (int i = 0; i < alls.size(); i++) {
+            Enchere get = alls.get(i);
+            Users vo = new Users();
+            vo.setId(get.getUsersId());
+            Categorie gorie = new Categorie();
+            gorie.setId(get.getCategorieId());
+            get.setCat(gorie.getCategorie());
+           
+            get.setUser(vo.getUsers());
+        EncherePhoto pho = new EncherePhoto();
+        pho.setEnchereId(vo.getId());
+            get.setPhoto(pho.select(null));
+            all.add(get);
+        }
+        _val_.put("data", all);
+
+        return gson.toJson(_val_);
+    }
+
+    @GetMapping("categories/users/{id}")
+    String getcat(@PathVariable int id) throws Exception {
+        Enchere am = new Enchere();
+        Gson gson = new Gson();
+        HashMap _val_ = new HashMap<String, Object>();
+        _val_.put("data", new Categorie().selectBySQL(" select *From categorie where id in (select categorieid from enchere where usersid=" + id+")", null));
+        return gson.toJson(_val_);
     }
 
     @GetMapping("encheres/{id}")
@@ -73,8 +110,8 @@ public class EnchereService {
             all.add(get);
         }
         _val_.put("data", all);
-//        _val_.put("photo", pho.select(null));
-        
+        _val_.put("photo", pho.select(null));
+
         return gson.toJson(_val_);
     }
 
@@ -101,7 +138,7 @@ public class EnchereService {
 //            }
         _val_.put("data", am);
         return gson.toJson(_val_);
-        
+
     }
 
     @PostMapping("encheres/{id}/close")
@@ -128,5 +165,5 @@ public class EnchereService {
         _val_.put("data", new Fail(Boolean.toString(am.isExpirer()), "200"));
         return gson.toJson(_val_);
     }
-    
+
 }

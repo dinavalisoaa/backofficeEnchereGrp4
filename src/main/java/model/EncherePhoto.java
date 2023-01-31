@@ -17,6 +17,7 @@ import java.util.Arrays;
 import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import utils.UFunction;
 
 /**
  *
@@ -53,29 +54,6 @@ public class EncherePhoto extends ObjectBDD {
         return encodedString;
     }
 
-    public static String convert(String file) {
-        String base64 = null;
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        try {
-            //Can be any support image format
-            final String formatName = file.split("\\.")[1];
-
-            //Convert image data to Base64 and write date to the output stream 
-//    final BufferedImage image = ImageIO.read(new File("D:\\cap.png"));
-            final BufferedImage image = ImageIO.read(new File(file));
-
-            ImageIO.write(image, formatName, java.util.Base64.getEncoder().wrap(os));
-
-            //Create Base64 string
-            base64 = os.toString(StandardCharsets.UTF_8.name());
-    System.out.println("-"+base64);
-        } catch (final IOException ioe) {
-
-            throw new UncheckedIOException(ioe);
-        }
-        return base64;
-    }
-
     private static byte[] loadFile(File file) throws IOException {
         InputStream is = new FileInputStream(file);
 
@@ -99,21 +77,33 @@ public class EncherePhoto extends ObjectBDD {
         is.close();
         return bytes;
     }
+public static String convert(String file) {
+        String base64 = null;
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+            //Can be any support image format
+            final String formatName = file.split("\\.")[1];
 
+            //Convert image data to Base64 and write date to the output stream 
+//    final BufferedImage image = ImageIO.read(new File("D:\\cap.png"));
+            final BufferedImage image = ImageIO.read(new File(file));
+
+            ImageIO.write(image, formatName, java.util.Base64.getEncoder().wrap(os));
+
+            //Create Base64 string
+            base64 = os.toString(StandardCharsets.UTF_8.name());
+//    System.out.println("-"+base64/);
+        } catch (final IOException ioe) {
+
+            throw new UncheckedIOException(ioe);
+        }
+        return base64;
+    }
     public void setPIC(String image) throws Exception {
         try {
-            File f = new File(image); //change path of image according to you
-            FileInputStream fis = new FileInputStream(f);
-            byte byteArray[] = new byte[(int) f.length()];
-//    byte[]fileContent=F
-
-            fis.read(byteArray);
-            String imageString = encodeFileToBase64Binary(image);
+            String files_ = "data:image/png;base64, " +convert(image);
             EncherePhoto ph = new EncherePhoto();
-            ph.setPhoto(convert(image));
-//            System.err.println(imageString);
-//        ph.setEnchereId())
-//ph;
+            ph.setPhoto(files_);
             ph.setEnchereId(this.enchereId);
             ph.insert(null);
         } catch (Exception ex) {

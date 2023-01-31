@@ -76,7 +76,16 @@ demn.setValue(value);
         }
         return texte;
     }
- 
+  @GetMapping("categories")
+   String getOnes() throws Exception {
+        Enchere am = new Enchere();
+        Gson gson = new Gson();
+        HashMap _val_ = new HashMap<String, Object>();
+       
+        _val_.put("data", new Categorie().select(null));
+        return gson.toJson(_val_);
+    }
+
    @GetMapping("parametrages/{id}")
     String alll(@PathVariable int id) throws Exception {
         Gson gson = new Gson();

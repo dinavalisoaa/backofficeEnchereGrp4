@@ -28,10 +28,15 @@ public class UsersEnchereService {
 //creer son propres en Encheres
 
     @PostMapping("/users/{id}/encheres")
-    String Create(@RequestParam double prixMin,
-            @PathVariable int id, @RequestParam int categorieId,
-            @RequestParam String descriProduit, @RequestParam double durer, @RequestHeader String token) throws Exception {
+    String Create(HttpServletRequest request,
+            @PathVariable int id, @RequestHeader String token) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
+        double prixMin = Double.parseDouble(request.getParameter("prixMin"));
+        String descriProduit = (request.getParameter("descriProduit"));
+
+        double durer = Double.parseDouble(request.getParameter("durer"));
+
+        int categorieId = Integer.parseInt(request.getParameter("categorieId"));
 
         Gson gson = new Gson();
         try {
@@ -169,16 +174,17 @@ public class UsersEnchereService {
     }
 
     @PostMapping("/users/{id}/encheres/{idc}/addPic")
-    String updatePic(@PathVariable int id, @PathVariable int idc, @RequestParam String photo) throws Exception {
+    @ResponseBody
+        String updatePic(@PathVariable int id, @PathVariable int idc, @RequestBody String photo) throws Exception {
         Gson gson = new Gson();
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
-
+        Photo gg=gson.fromJson(photo, Photo.class);
         try {
             EncherePhoto o = new EncherePhoto();
             o.setEnchereId(idc);
-            o.setPIC(photo);
+            o.setPhoto(gg.getPhoto());
 //            o.setPhoto(photo.toString());
-//            o.insert(null);
+            o.insert(null);
             texte = gson.toJson(new Message(new Success(id, "Insert Ok!!")));
         } catch (Exception ex) {
             texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
@@ -189,6 +195,17 @@ public class UsersEnchereService {
 
     //  get tous les encheresz
 //    ArrayList<Enchere> advancedSearch(String cle)
+    @GetMapping("/users/{id}/categories/{idc}/encheres")
+    String getOned(@PathVariable int id, @PathVariable int idc) throws Exception {
+        Enchere am = new Enchere();
+        am.setCategorieId(idc);
+        am.setUsersId(id);
+        Gson gson = new Gson();
+        HashMap _val_ = new HashMap<String, Object>();
+        _val_.put("data", am.select(null));
+        return gson.toJson(_val_);
+    }
+
     @GetMapping("/users/{id}/encheres")
     String getOne(@PathVariable int id, @RequestHeader String token) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
@@ -252,9 +269,13 @@ public class UsersEnchereService {
         Enchere am = new Enchere();
         am.setUsersId(id);
         am.setId(idc);
+        EncherePhoto ph = new EncherePhoto();
+        ph.setEnchereId(idc);
         Gson gson = new Gson();
         HashMap _val_ = new HashMap<String, Object>();
         _val_.put("data", am.select(null));
+        _val_.put("photo", ph.select(null));
+
         return gson.toJson(_val_);
     }
 }

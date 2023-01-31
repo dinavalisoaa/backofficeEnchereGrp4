@@ -5,6 +5,12 @@
 package utils;
 
 import BddObject.Connexion;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -17,9 +23,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -27,6 +35,8 @@ import java.util.logging.Logger;
  */
 public class UFunction {
 //  
+    
+
     public final String current_timestamp=Timestamp.valueOf(LocalDateTime.now()).toString();
         public final String current_time=Date.valueOf(LocalDate.now()).toString();
 

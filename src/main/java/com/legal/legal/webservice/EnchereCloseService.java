@@ -39,7 +39,7 @@ public class EnchereCloseService {
 //            cpt.insert(null);
             texte = gson.toJson(new Message(new Success(id, "Success")));
         } catch (Exception ex) {
-//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
             throw ex;
         }
         return texte;
@@ -83,7 +83,7 @@ public class EnchereCloseService {
 //            enchere.update("id", null);
 //            texte = gson.toJson(new Message(new Success(id, "Update Ok!!")));
 //        } catch (Exception ex) {
-//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
 //            throw ex;
 //        }
 //        return texte;
@@ -110,7 +110,7 @@ public class EnchereCloseService {
 //            enchere.update("id", null);
 //            texte = gson.toJson(new Message(new Success(id, "Update Ok!!")));
 //        } catch (Exception ex) {
-//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
 //            throw ex;
 //        }
 //        return texte;

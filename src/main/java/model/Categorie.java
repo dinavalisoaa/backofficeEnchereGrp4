@@ -53,6 +53,11 @@ public class Categorie extends ObjectBDD {
 Categorie cat=new Categorie();
 cat.setId(this.id);
         return ((Categorie) cat.select(null).get(0));
+    }public Categorie getCategorie(Connection con) throws Exception {
+//    ArrayList<Users>vao=()
+Categorie cat=new Categorie();
+cat.setId(this.id);
+        return ((Categorie) cat.select(con).get(0));
     }
 
     /**

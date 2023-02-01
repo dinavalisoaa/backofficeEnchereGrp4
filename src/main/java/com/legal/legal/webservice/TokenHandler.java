@@ -17,7 +17,7 @@ import io.jsonwebtoken.Claims;
  */
 public class TokenHandler {
 
-    public static final long DateEXP =1000000;
+    public static final long DateEXP =1000000000;
     public static final String keyToken = "qazwsxedcrfvtgbyhnujmik";
 
     int id;

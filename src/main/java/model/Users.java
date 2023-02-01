@@ -87,6 +87,13 @@ public class Users extends ObjectBDD {
         return ((Users) tt.select(null).get(0));
     }
 
+    public Users getUsers(Connection con) throws Exception {
+//    ArrayList<Users>vao=()
+        Users tt = new Users();
+        tt.setId(this.id);
+        return ((Users) tt.select(con).get(0));
+    }
+
     public double getCurrentMoney() throws Exception {
         Compte cpt = new Compte();
         cpt.setUsersId(id);

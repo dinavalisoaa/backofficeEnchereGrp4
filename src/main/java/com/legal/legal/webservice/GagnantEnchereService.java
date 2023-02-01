@@ -34,7 +34,7 @@ public class GagnantEnchereService {
 ////            demn.insert(null);
 ////            texte = gson.toJson(new Message(new Success(demn.getLastID(), "Success")));
 //        } catch (Exception ex) {
-//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
 //            throw ex;
 //        }
 //        return texte;
@@ -53,7 +53,7 @@ public class GagnantEnchereService {
 //            demn.update("Id",null);
 //            texte = gson.toJson(new Message(new Success(id, "Update OK!!")));
 //        } catch (Exception ex) {
-//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
 //            throw ex;
 //        }
 //        return texte;
@@ -71,7 +71,7 @@ public class GagnantEnchereService {
 //        _val_.put("data", demn.select(null));
 //            texte = gson.toJson(new Message(new Success(id, "Update OK!!")));
 //        } catch (Exception ex) {
-//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
 //            throw ex;
 //        }
 //        return gson.toJson(_val_);
@@ -86,7 +86,7 @@ public class GagnantEnchereService {
 //            Parametrage demn=new Parametrage();
 //        _val_.put("data", demn.select(null));
 //        } catch (Exception ex) {
-//            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+//            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
 //            throw ex;
 //        }
 //        return gson.toJson(_val_);

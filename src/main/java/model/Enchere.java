@@ -33,6 +33,12 @@ public class Enchere extends ObjectBDD {
     private String descriProduit;
     private double durer = -1;
     @Ignore
+    String dateFarany;
+    @Ignore
+    String leraFarany;
+    @Ignore
+    String depuis;
+    @Ignore
     Users userGagnant;
     @Ignore
     Categorie cat;
@@ -44,21 +50,64 @@ public class Enchere extends ObjectBDD {
     double prixMiseInitial = -1;
     @Ignore
     Users user;
-    @Ignore 
+    @Ignore
     double rentabilite;
     @Ignore
     ArrayList photo;
 
+    @Ignore
+    boolean expiration;
+    
+    public String getDateFarany() {
+//     LocalDateTime da=LocalDateTime.parse( );
+        String g = utils.UFunction.timestampAdd(this.getDateDebut().split("\\.")[0], (int) this.durer);
+
+        return g;
+    }
+
+    public boolean getExpiration() {
+        return utils.UFunction.depasser(this.getDateDebut().split("\\.")[0], (int) this.durer);
+    }
+
+    public void setExpiration(boolean expiration) {
+        this.expiration = expiration;
+    }
+    
+
+    public void setDateFarany(String dateFarany) {
+        this.dateFarany = dateFarany;
+    }
+
+    public String getLeraFarany() {
+//        utils.UFunction.timestampAdd("2023-01-19 23:27:27", 24));
+
+        LocalDateTime da = LocalDateTime.parse(utils.UFunction.timestampAdd(this.getDateDebut().split("\\.")[0], (int) this.durer));
+        return da.toString();
+    }
+
+    public void setLeraFarany(String leraFarany) {
+        this.leraFarany = leraFarany;
+    }
+
+    public String getDepuis() {
+        double d = utils.UFunction.timestampDiff(this.getDateDebut(), LocalDateTime.now().toString().split("T")[0]+" "+LocalDateTime.now().toString().split("T")[1]);
+        return Double.toString(d);
+    }
+
+    public void setDepuis(String depuis) {
+        this.depuis = depuis;
+    }
+
     public ArrayList getPhoto() throws Exception {
-        EncherePhoto kk=new EncherePhoto();
-       kk.setEnchereId(this.id);
-       return kk.select(null);
+        EncherePhoto kk = new EncherePhoto();
+        kk.setEnchereId(this.id);
+        return kk.select(null);
     }
 
     public void setPhoto(ArrayList photo) {
         this.photo = photo;
     }
-    
+
     public double getRentabilite() {
         return rentabilite;
     }
@@ -66,7 +115,6 @@ public class Enchere extends ObjectBDD {
     public void setRentabilite(double rentabilite) {
         this.rentabilite = rentabilite;
     }
-    
 
     public ArrayList<Enchere> advancedSearch(String cle) throws Exception {
         String sql = " select *from enchere join categorie cat on enchere.categorieid=cat.id where 1=1";
@@ -135,13 +183,14 @@ public class Enchere extends ObjectBDD {
         vo.setId(this.categorieId);
         return ((Categorie) vo.select(null).get(0));
     }
- public EnchereMove getEnchereMovesGagnantId(Connection con) throws SQLException, Exception {
+
+    public EnchereMove getEnchereMovesGagnantId(Connection con) throws SQLException, Exception {
         Users valiny = new Users();
         EnchereMove users = new EnchereMove();
         Connection connection = null;
         int id = 0;
-          ResultSet resultSet=null;
-             PreparedStatement preparedStatement=null;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
         try {
 //            connection = Connexion.getConn();
             String sql = "select * from encheremove\n"
@@ -152,7 +201,7 @@ public class Enchere extends ObjectBDD {
                     + "group by enchereid \n"
                     + ") ";
 //            System.out.println(sql);
-            preparedStatement =con.prepareStatement(sql);
+            preparedStatement = con.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 id = resultSet.getInt("id");
@@ -165,7 +214,7 @@ public class Enchere extends ObjectBDD {
             resultSet.close();
 //            connection.close();
         }
-        
+
         return users.getEnchereMove();
 
     }
@@ -289,7 +338,6 @@ public class Enchere extends ObjectBDD {
         System.out.println("New Date : " + newDate);
         return newDate.toString().replace("T", " ");
     }
-    
 
     public int getId() {
         return this.id;
@@ -398,7 +446,7 @@ public class Enchere extends ObjectBDD {
      * @param durer
      */
     public void setDurer(double durer) throws Exception {
-      
+
         this.durer = durer;
     }
 
@@ -416,13 +464,13 @@ public class Enchere extends ObjectBDD {
                     + "group by enchereid\n"
                     + ")";
             System.out.println(sql);
-            
+
             PreparedStatement preparedStatement = Connexion.getConn().prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
 
                 users.setId(resultSet.getInt("usersid"));
-                            users=users.getUsers();
+                users = users.getUsers();
 
                 users.setMiseGagnant(resultSet.getDouble("prixmise"));
 
@@ -435,19 +483,20 @@ public class Enchere extends ObjectBDD {
             return users;
         }
     }
+
     public int getNbUserVisit() throws SQLException, Exception {
         Users valiny = new Users();
         Users users = new Users();
         Connection connection = null;
-        int j=0;
+        int j = 0;
         try {
             connection = Connexion.getConn();
-            String sql = "select count(distinct(usersid)) as in from encheremove where enchereid="+this.getId()+"";
+            String sql = "select count(distinct(usersid)) as in from encheremove where enchereid=" + this.getId() + "";
             System.out.println(sql);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-j=resultSet.getInt("in");
+                j = resultSet.getInt("in");
 //                users.setId(resultSet.getInt("usersid"));
 //                users.setMiseGagnant(resultSet.getDouble("prixmise"));
 
@@ -477,7 +526,7 @@ j=resultSet.getInt("in");
                     + "group by enchereid\n"
                     + ") ";
             System.out.println(sql);
-            PreparedStatement preparedStatement =connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 id = resultSet.getInt("id");

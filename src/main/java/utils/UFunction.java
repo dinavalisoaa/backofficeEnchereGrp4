@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -35,28 +36,27 @@ import javax.imageio.ImageIO;
  */
 public class UFunction {
 //  
-    
 
-    public final String current_timestamp=Timestamp.valueOf(LocalDateTime.now()).toString();
-        public final String current_time=Date.valueOf(LocalDate.now()).toString();
+    public final String current_timestamp = Timestamp.valueOf(LocalDateTime.now()).toString();
+    public final String current_time = Date.valueOf(LocalDate.now()).toString();
 
-public static int getSequence(String str) {
+    public static int getSequence(String str) {
         Connection connect = null;
         Statement stmt = null;
-           ResultSet res = null;
-           int date=0;
+        ResultSet res = null;
+        int date = 0;
         ResultSetMetaData resultMeta = null;
         PreparedStatement pst = null;
         try {
-              connect=BddObject.Connexion.getConn();
-                            pst=connect.prepareStatement("select next value for "+str+"_id_seq as date");
+            connect = BddObject.Connexion.getConn();
+            pst = connect.prepareStatement("select next value for " + str + "_id_seq as date");
 
 //              pst=connect.prepareStatement("Select nextval('personne_id_seq') as date");
-             res=pst.executeQuery();
+            res = pst.executeQuery();
             resultMeta = res.getMetaData();
             int b = 0;
             while (res.next()) {
-             date=res.getInt("date");
+                date = res.getInt("date");
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -74,25 +74,24 @@ public static int getSequence(String str) {
         return date;
     }
 
-public static int getSequence_Sync() {
+    public static int getSequence_Sync() {
         Connection connect = null;
         Statement stmt = null;
-           ResultSet res = null;
-           int date=0;
+        ResultSet res = null;
+        int date = 0;
         ResultSetMetaData resultMeta = null;
         PreparedStatement pst = null;
         try {
-              connect=BddObject.Connexion.getConn();
+            connect = BddObject.Connexion.getConn();
 //              pst=connect.prepareStatement("Select nextval('tablesync_id_seq') as date");          
-              pst=connect.prepareStatement("select next value for tablesync_id_seq as date");
+            pst = connect.prepareStatement("select next value for tablesync_id_seq as date");
 
 //              pst=connect.prepareStatement("Select nextval('tablesync_id_seq') as date");
-
-              res=pst.executeQuery();
+            res = pst.executeQuery();
             resultMeta = res.getMetaData();
             int b = 0;
             while (res.next()) {
-             date=res.getInt("date");
+                date = res.getInt("date");
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -109,6 +108,7 @@ public static int getSequence_Sync() {
 
         return date;
     }
+
     public static Date[] mois_a_venir() {
         Date next = Date.valueOf("2022-12-12");
 //        next.setDate(2);
@@ -154,22 +154,21 @@ public static int getSequence_Sync() {
 
     public static int count_isTsyNiasa(String date1, String date2) throws Exception {
         int d = utils.UFunction.dateDiff(date2, date1);
-        System.err.println("DIFF"  +d);
+        System.err.println("DIFF" + d);
         java.util.Date inc = java.sql.Date.valueOf(date1);
         inc.setDate(inc.getDate() - 1);
 
         int cpt = 0;
         int g = 0;
         while (cpt < d) {
-            inc.setDate(inc.getDate() + 1);       
-           
+            inc.setDate(inc.getDate() + 1);
 
             if (getJour(inc.toString()).equals("Thu") || getJour(inc.toString()).equals("Tue")) {
 //                System.err.println("__" + inc.toString());
                 g++;
-                          
+
             }
-                 
+
             cpt++;
         }
 //                System.out.println(date1 + "  <="+g+"=>  " + date2);
@@ -180,17 +179,16 @@ public static int getSequence_Sync() {
     public static int count_niasa(int si) throws Exception {
         Date[] fin = mois_a_venir_ext();
         Date[] deb = mois_a_venir();
-        int f=0;
-        int re=0;
+        int f = 0;
+        int re = 0;
         for (int i = 0; i < fin.length; i++) {
 //            Date moi = mois[i];
 //            if (si == i+1)
-            if (i  < si)
-            {
+            if (i < si) {
                 int nbr = utils.UFunction.dateDiff(fin[i].toString(), deb[i].toString());
                 int tsy = count_isTsyNiasa(deb[i].toString(), fin[i].toString());
-                re = (nbr ) - tsy;
-                f+=re;
+                re = (nbr) - tsy;
+                f += re;
             }
         }
 
@@ -249,6 +247,29 @@ public static int getSequence_Sync() {
             throw new Exception("Date invalid");
 
         }
+    }
+
+    public static String timestampAdd(String datetime, int val) {
+
+        String str = datetime;
+        str = str.split("\\.")[0];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
+        LocalDateTime d = dateTime.plusHours(val);
+        String fats = d.toString();
+        String m1 = fats.split("T")[0];
+        String m2 = fats.split("T")[1];
+
+        return m1 + " " + m2;
+    }
+
+    public static boolean depasser(String datetime, int val) {
+        String str = datetime;
+        str = str.split("\\.")[0];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
+        LocalDateTime d = dateTime.plusHours(val);
+        return  d.isBefore(LocalDateTime.now());
     }
 
     public static double timestampDiff(String start_date,

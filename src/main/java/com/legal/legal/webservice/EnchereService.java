@@ -1,10 +1,12 @@
 package com.legal.legal.webservice;
 
+import BddObject.Connexion;
 import java.util.List;
 import java.util.ArrayList;
 import model.*;
 import com.google.gson.*;
 import com.legal.legal.mongo.MongoRepository;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.HashMap;
 import org.springframework.boot.SpringApplication;
@@ -32,22 +34,25 @@ public class EnchereService {
         Enchere am = new Enchere();
 //        am.setUser/sId(id);
         Gson gson = new Gson();
-        String texte = gson.toJson(am.select(null));
+                Connection con = Connexion.getConn();
+
+        String texte = gson.toJson(am.select(con));
         HashMap _val_ = new HashMap<String, Object>();
         ArrayList<Enchere> all = new ArrayList<>();
-        ArrayList<Enchere> alls = am.select(null);
+        ArrayList<Enchere> alls = am.select(con);
         for (int i = 0; i < alls.size(); i++) {
             Enchere get = alls.get(i);
             Users vo = new Users();
             vo.setId(get.getUsersId());
             Categorie gorie = new Categorie();
             gorie.setId(get.getCategorieId());
-            get.setCat(gorie.getCategorie());
-            get.setUser(vo.getUsers());
+            get.setCat(gorie.getCategorie(con));
+            get.setUser(vo.getUsers(con));
 //            get.setPhoto(get.getPhoto());
             all.add(get);
         }
         _val_.put("data", all);
+        con.close();
         return gson.toJson(_val_);
 //        return texte;
     }
@@ -58,25 +63,27 @@ public class EnchereService {
         Enchere am = new Enchere();
         am.setCategorieId(id);
         Gson gson = new Gson();
+        Connection con = Connexion.getConn();
+
         HashMap _val_ = new HashMap<String, Object>();
         ArrayList<Enchere> all = new ArrayList<>();
-        ArrayList<Enchere> alls = am.select(null);
+        ArrayList<Enchere> alls = am.select(con);
         for (int i = 0; i < alls.size(); i++) {
             Enchere get = alls.get(i);
             Users vo = new Users();
             vo.setId(get.getUsersId());
             Categorie gorie = new Categorie();
             gorie.setId(get.getCategorieId());
-            get.setCat(gorie.getCategorie());
-           
-            get.setUser(vo.getUsers());
-        EncherePhoto pho = new EncherePhoto();
-        pho.setEnchereId(vo.getId());
-            get.setPhoto(pho.select(null));
+            get.setCat(gorie.getCategorie(con));
+
+            get.setUser(vo.getUsers(con));
+            EncherePhoto pho = new EncherePhoto();
+            pho.setEnchereId(vo.getId());
+            get.setPhoto(pho.select(con));
             all.add(get);
         }
         _val_.put("data", all);
-
+        con.close();
         return gson.toJson(_val_);
     }
 
@@ -85,7 +92,7 @@ public class EnchereService {
         Enchere am = new Enchere();
         Gson gson = new Gson();
         HashMap _val_ = new HashMap<String, Object>();
-        _val_.put("data", new Categorie().selectBySQL(" select *From categorie where id in (select categorieid from enchere where usersid=" + id+")", null));
+        _val_.put("data", new Categorie().selectBySQL(" select *From categorie where id in (select categorieid from enchere where usersid=" + id + ")", null));
         return gson.toJson(_val_);
     }
 
@@ -98,20 +105,21 @@ public class EnchereService {
         ArrayList<Enchere> all = new ArrayList<>();
         EncherePhoto pho = new EncherePhoto();
         pho.setEnchereId(id);
-        ArrayList<Enchere> alls = am.select(null);
+        Connection con = Connexion.getConn();
+        ArrayList<Enchere> alls = am.select(con);
         for (int i = 0; i < alls.size(); i++) {
             Enchere get = alls.get(i);
             Users vo = new Users();
             vo.setId(get.getUsersId());
             Categorie gorie = new Categorie();
             gorie.setId(get.getCategorieId());
-            get.setCat(gorie.getCategorie());
-            get.setUser(vo.getUsers());
+            get.setCat(gorie.getCategorie(con));
+            get.setUser(vo.getUsers(con));
             all.add(get);
         }
         _val_.put("data", all);
-        _val_.put("photo", pho.select(null));
-
+        _val_.put("photo", pho.select(con));
+        con.close();
         return gson.toJson(_val_);
     }
 

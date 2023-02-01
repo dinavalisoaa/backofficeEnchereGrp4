@@ -33,11 +33,11 @@ public class UsersEnchereService {
         HashMap _val_ = new HashMap<String, Object>();
         double prixMin = Double.parseDouble(request.getParameter("prixMin"));
         String descriProduit = (request.getParameter("descriProduit"));
-
+        
         double durer = Double.parseDouble(request.getParameter("durer"));
-
+        
         int categorieId = Integer.parseInt(request.getParameter("categorieId"));
-
+        
         Gson gson = new Gson();
         try {
             TokenHandler tokens = new TokenHandler().ToToken(token);
@@ -73,16 +73,16 @@ public class UsersEnchereService {
             enchere.insert(con);
             texte = gson.toJson(new Message(new Success(enchere.getLastID(), "Success")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(), "500")));
+            
         } finally {
             con.close();;
-
+            
         }
-
+        
         return texte;
     }
-
+    
     @PutMapping("/users/{id}/encheres/{ide}/addpictures")
     String change(
             @PathVariable int id,
@@ -96,7 +96,7 @@ public class UsersEnchereService {
             enp.insert(null);
             texte = gson.toJson(new Message(new Success(200, "Success")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(), "500")));
 //            
         }
         return texte;
@@ -121,12 +121,12 @@ public class UsersEnchereService {
             enchere.setId(idc);
             enchere.setUsersId(id);
             enchere.setState(1);
-
+            
             enchere.update("id", null);
             texte = gson.toJson(new Message(new Success(id, "Update Ok!!")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
-
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(), "500")));
+            
         }
         return texte;
     }
@@ -135,7 +135,7 @@ public class UsersEnchereService {
     @PutMapping("/users/{id}/encheres/{idc}")
     String update(@PathVariable int id, @PathVariable int idc, HttpServletRequest rq, @RequestHeader String token) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
-
+        
         Gson gson = new Gson();
         try {
             TokenHandler tokens = new TokenHandler().ToToken(token);
@@ -157,37 +157,36 @@ public class UsersEnchereService {
             if (rq.getParameter("durer") != null) {
                 enchere.setDurer(Double.parseDouble((rq.getParameter("durer"))));
             }
-
+            
             if (rq.getParameter("descriProduit") != null) {
                 enchere.setDescriProduit(rq.getParameter("descriProduit"));
-
+                
             }
             enchere.setUsersId(id);
             enchere.setId(idc);
             enchere.update("id", null);
             texte = gson.toJson(new Message(new Success(id, "Update Ok!!")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(), "500")));
 //            
         }
         return texte;
     }
-
+    
     @PostMapping("/users/{id}/encheres/{idc}/addPic")
     @ResponseBody
-        String updatePic(@PathVariable int id, @PathVariable int idc, @RequestBody String photo) throws Exception {
+    String updatePic(@PathVariable int id, @PathVariable int idc, @RequestBody String photo) throws Exception {
         Gson gson = new Gson();
         String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
-        Photo gg=gson.fromJson(photo, Photo.class);
+        Photo gg = gson.fromJson(photo, Photo.class);
         try {
             EncherePhoto o = new EncherePhoto();
             o.setEnchereId(idc);
             o.setPhoto(gg.getPhoto());
-//            o.setPhoto(photo.toString());
             o.insert(null);
             texte = gson.toJson(new Message(new Success(id, "Insert Ok!!")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(), "500")));
 //         /   
         }
         return texte;
@@ -205,11 +204,11 @@ public class UsersEnchereService {
         _val_.put("data", am.select(null));
         return gson.toJson(_val_);
     }
-
+    
     @GetMapping("/users/{id}/encheres")
     String getOne(@PathVariable int id, @RequestHeader String token) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
-
+        
         Gson gson = new Gson();
         try {
             TokenHandler tokens = new TokenHandler().ToToken(token);
@@ -221,16 +220,35 @@ public class UsersEnchereService {
         }
         Enchere am = new Enchere();
         am.setUsersId(id);
+                Connection con=Connexion.getConn();
+
+        ArrayList<Enchere> tous = am.selectBySQL("select *from enchere where usersId=" + id + " order by id desc", con);
+        ArrayList<Enchere> touss = new ArrayList<>();
+        for (int i = 0; i < tous.size(); i++) {
+            Enchere uu = tous.get(i);
+            EncherePhoto g = new EncherePhoto();
+            g.setEnchereId(uu.getId());
+            uu.setDateFarany(uu.getDateFarany());
+            uu.setDepuis(uu.getDepuis());
+            uu.setExpiration(uu.getExpiration());
+            uu.setPhoto(g.select(con));
+            Categorie gorie = new Categorie();
+            gorie.setId(uu.getCategorieId());
+            uu.setCat(gorie.getCategorie(con));
+            touss.add(uu);
+        }
+
 //        String texte = gson.toJson(am.select(null));
 //        return texte;
-        _val_.put("data", am.select(null));
+        _val_.put("data", touss);
+        con.close();
         return gson.toJson(_val_);
     }
-
+    
     @GetMapping("/users/{id}/encheres/search")
     String recherhce(@PathVariable int id, HttpServletRequest request, @RequestHeader String token) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
-
+        
         Gson gson = new Gson();
         try {
             TokenHandler tokens = new TokenHandler().ToToken(token);
@@ -263,7 +281,7 @@ public class UsersEnchereService {
         _val_.put("data", sera);
         return gson.toJson(_val_);
     }
-
+    
     @GetMapping("/users/{id}/encheres/{idc}")
     String getOneEnc(@PathVariable int id, @PathVariable int idc) throws Exception {
         Enchere am = new Enchere();
@@ -273,9 +291,26 @@ public class UsersEnchereService {
         ph.setEnchereId(idc);
         Gson gson = new Gson();
         HashMap _val_ = new HashMap<String, Object>();
-        _val_.put("data", am.select(null));
+        ArrayList<Enchere> touss = new ArrayList<>();
+        ArrayList<Enchere> tous = am.select(null);
+        for (int i = 0; i < tous.size(); i++) {
+            Enchere uu = tous.get(i);
+            EncherePhoto g = new EncherePhoto();
+            g.setEnchereId(uu.getId());
+            uu.setDateFarany(uu.getDateFarany());
+            uu.setDepuis(uu.getDepuis());
+            uu.setExpiration(uu.getExpiration());
+            uu.setUserGagnant(uu.getGagnant());
+            
+            Categorie gorie = new Categorie();
+            gorie.setId(uu.getCategorieId());
+            uu.setCat(gorie.getCategorie());
+            uu.setPhoto(g.select(null));
+            touss.add(uu);
+        }
+        _val_.put("data",touss);
         _val_.put("photo", ph.select(null));
-
+        
         return gson.toJson(_val_);
     }
 }

@@ -38,7 +38,7 @@ demn.setValue(value);
             demn.insert(null);
             texte = gson.toJson(new Message(new Success(demn.getLastID(), "Success")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
             
         }
         return texte;
@@ -57,7 +57,7 @@ demn.setValue(value);
             demn.update("Id",null);
             texte = gson.toJson(new Message(new Success(id, "Update OK!!")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
             
         }
         return texte;
@@ -71,7 +71,7 @@ demn.setValue(value);
         try {
             texte = gson.toJson(_val_);
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
             
         }
         return texte;
@@ -97,7 +97,7 @@ demn.setValue(value);
         _val_.put("data", demn.select(null));
             texte = gson.toJson(new Message(new Success(id, "Update OK!!")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
             
         }
         return gson.toJson(_val_);
@@ -112,7 +112,7 @@ demn.setValue(value);
             Parametrage demn=new Parametrage();
         _val_.put("data", demn.select(null));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
             
         }
         return gson.toJson(_val_);

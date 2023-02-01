@@ -63,7 +63,7 @@ public class EnchereMoveCoteUtilisateur {
             EnchereMove.setTransaction(moves, id);
             texte = gson.toJson(new Message(new Success(moves.lastMove(con).getId(), "Success")));
         } catch (Exception ex) {
-            texte = gson.toJson(new Message(new Fail("500", ex.getMessage())));
+            texte = gson.toJson(new Message(new Fail(ex.getMessage(),"500")));
 //            throw ex;
         }
         return texte;

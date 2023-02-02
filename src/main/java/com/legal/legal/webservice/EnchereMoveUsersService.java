@@ -58,6 +58,40 @@ public class EnchereMoveUsersService {
 //          return texte;
     }
 
+
+    @GetMapping("users/{idusers}/enchereMoves")
+    String mymise(
+            @PathVariable int idusers, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+
+        Gson gson = new Gson();
+        try{
+        TokenHandler tokens = new TokenHandler().ToToken(token);
+        int usersId = tokens.getUtilisateur();
+        }catch(Exception d){
+        _val_.put("error",new Fail(d.getMessage(),"404"));
+        return gson.toJson(_val_);
+        }
+        String texte = "";// gson.toJson(new Message(new Success(idKilo, "Success")));
+        EnchereMove move = new EnchereMove();
+        move.setUsersId(idusers);
+//        move.setEnchereId(id);
+        ArrayList<EnchereMove> all = new ArrayList<>();
+        ArrayList<EnchereMove> alls = move.select(null);
+        for (int i = 0; i < alls.size(); i++) {
+            EnchereMove get = alls.get(i);
+            Users vo = new Users();
+            Enchere enchere = new Enchere();
+            enchere.setId(get.getEnchereId());
+            vo.setId(get.getUsersId());
+            get.setUser(vo.getUsers());
+            get.setEnchere(enchere.getEnchere());
+            all.add(get);
+        }
+        _val_.put("data", all);
+        return gson.toJson(_val_);
+//          return texte;
+    }
 //get un mouvements d'enchere sur mes enchere 
     @GetMapping("users/{idusers}/encheres/{id}/enchereMoves/{idm}")
     String gethOne(@PathVariable int id, @PathVariable int idusers, @PathVariable int idm, @RequestHeader String token) throws Exception {

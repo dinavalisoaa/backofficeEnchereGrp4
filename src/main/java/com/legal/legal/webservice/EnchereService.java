@@ -34,9 +34,9 @@ public class EnchereService {
         Enchere am = new Enchere();
 //        am.setUser/sId(id);
         Gson gson = new Gson();
-                Connection con = Connexion.getConn();
+        Connection con = Connexion.getConn();
 
-        String texte = gson.toJson(am.select(con));
+//        String texte = gson.toJson(am.select(con));
         HashMap _val_ = new HashMap<String, Object>();
         ArrayList<Enchere> all = new ArrayList<>();
         ArrayList<Enchere> alls = am.select(con);
@@ -66,23 +66,27 @@ public class EnchereService {
         Connection con = Connexion.getConn();
 
         HashMap _val_ = new HashMap<String, Object>();
-        ArrayList<Enchere> all = new ArrayList<>();
-        ArrayList<Enchere> alls = am.select(con);
-        for (int i = 0; i < alls.size(); i++) {
-            Enchere get = alls.get(i);
-            Users vo = new Users();
-            vo.setId(get.getUsersId());
-            Categorie gorie = new Categorie();
-            gorie.setId(get.getCategorieId());
-            get.setCat(gorie.getCategorie(con));
-
-            get.setUser(vo.getUsers(con));
-            EncherePhoto pho = new EncherePhoto();
-            pho.setEnchereId(vo.getId());
-            get.setPhoto(pho.select(con));
-            all.add(get);
+        ArrayList<Enchere> tous = am.selectBySQL("select *from enchere where categorieId=" + id + " ", null);
+        ArrayList<Enchere> touss = new ArrayList<>();
+        for (int i = 0; i < tous.size(); i++) {
+            Enchere uu = tous.get(i);
+            if (uu.getExpiration() == false) {
+                EncherePhoto g = new EncherePhoto();
+                g.setEnchereId(uu.getId());
+                uu.setDateFarany(uu.getDateFarany());
+                uu.setDepuis(uu.getDepuis());
+                Users u_ = new Users();
+                u_.setId(uu.getUsersId());
+                uu.setUser(u_.getUsers(con));
+                uu.setExpiration(uu.getExpiration());
+                uu.setPhoto(g.select(con));
+                Categorie gorie = new Categorie();
+                gorie.setId(uu.getCategorieId());
+                uu.setCat(gorie.getCategorie(con));
+                touss.add(uu);
+            }
         }
-        _val_.put("data", all);
+        _val_.put("data", touss);
         con.close();
         return gson.toJson(_val_);
     }
@@ -101,25 +105,33 @@ public class EnchereService {
         Enchere am = new Enchere();
         am.setId(id);
         Gson gson = new Gson();
-        HashMap _val_ = new HashMap<String, Object>();
-        ArrayList<Enchere> all = new ArrayList<>();
-        EncherePhoto pho = new EncherePhoto();
-        pho.setEnchereId(id);
         Connection con = Connexion.getConn();
-        ArrayList<Enchere> alls = am.select(con);
-        for (int i = 0; i < alls.size(); i++) {
-            Enchere get = alls.get(i);
-            Users vo = new Users();
-            vo.setId(get.getUsersId());
+        HashMap _val_ = new HashMap<String, Object>();
+        ArrayList<Enchere> tous = am.select(null);
+        ArrayList<Enchere> touss = new ArrayList<>();
+        for (int i = 0; i < tous.size(); i++) {
+            Enchere uu = tous.get(i);
+
+            uu.setDateFarany(uu.getDateFarany());
+            uu.setDepuis(uu.getDepuis());
+            Users u_ = new Users();
+            u_.setId(uu.getUsersId());
+            uu.setUser(u_.getUsers(con));
+            uu.setExpiration(uu.getExpiration());
             Categorie gorie = new Categorie();
-            gorie.setId(get.getCategorieId());
-            get.setCat(gorie.getCategorie(con));
-            get.setUser(vo.getUsers(con));
-            all.add(get);
+            gorie.setId(uu.getCategorieId());
+            uu.setCat(gorie.getCategorie(con));
+            touss.add(uu);
         }
-        _val_.put("data", all);
-        _val_.put("photo", pho.select(con));
+        EncherePhoto g = new EncherePhoto();
+        g.setEnchereId(id);
+//        am.setPhoto(am.select(con));
+
+        _val_.put("data", touss);
+        _val_.put("photo", g.select(con));
+//        .put("photo"
         con.close();
+//       _val_.put("data",am.select(null));       
         return gson.toJson(_val_);
     }
 
@@ -147,6 +159,34 @@ public class EnchereService {
         _val_.put("data", am);
         return gson.toJson(_val_);
 
+    }
+
+    @PostMapping("encheres/close")
+    String allClose() throws Exception {
+//        EnchereClose am = new EnchereClose();
+//        am.setEnchereId(id);
+//        am.setDateClose(LocalDate.now().toString());
+//        MongoRepository mon = new MongoRepository();
+//        mon.Create(am);
+        Connection con = Connexion.getConn();
+        ArrayList<Enchere> als = new Enchere().select(con);
+        ArrayList<Enchere> al = new ArrayList<>();
+
+        for (int i = 0; i < als.size(); i++) {
+            Enchere get = als.get(i);
+            if (get.getExpiration() == true && get.getState() == 0) {
+                Enchere yy = new Enchere();
+                yy.setId(get.getId());
+                yy.setState(1);
+                yy.update("Id", con);
+                al.add(get);
+            }
+        }
+        Gson gson = new Gson();
+        HashMap _val_ = new HashMap<String, Object>();
+        _val_.put("data", al);
+//       _val_.put("data",new Fail(Boolean.toString(am.isExpirer()), "200"));s
+        return gson.toJson(_val_);
     }
 
     @PostMapping("encheres/{id}/close")

@@ -200,11 +200,78 @@ public class UsersEnchereService {
         am.setCategorieId(idc);
         am.setUsersId(id);
         Gson gson = new Gson();
+        Connection con=Connexion.getConn();
         HashMap _val_ = new HashMap<String, Object>();
-        _val_.put("data", am.select(null));
+        ArrayList<Enchere>tous= am.select(null);
+        ArrayList<Enchere> touss = new ArrayList<>();
+        for (int i = 0; i < tous.size(); i++) {
+            Enchere uu = tous.get(i);
+            EncherePhoto g = new EncherePhoto();
+            g.setEnchereId(uu.getId());
+            uu.setDateFarany(uu.getDateFarany());
+            uu.setDepuis(uu.getDepuis());
+            Users u_=new Users();
+            u_.setId(uu.getUsersId());
+            uu.setUser(u_.getUsers(con));
+            uu.setExpiration(uu.getExpiration());
+            uu.setPhoto(g.select(con));
+            Categorie gorie = new Categorie();
+            gorie.setId(uu.getCategorieId());
+            uu.setCat(gorie.getCategorie(con));
+            touss.add(uu);
+        }
+        _val_.put("data",touss);
+        con.close();
         return gson.toJson(_val_);
     }
     
+    @GetMapping("/users/{id}/encheresRecherche")
+    String getOneRECHERCHE(@PathVariable int id,@RequestHeader String key,@RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+
+        Gson gson = new Gson();
+        try {
+            TokenHandler tokens = new TokenHandler().ToToken(token);
+            int usersId = tokens.getUtilisateur();
+            System.err.println(usersId);
+        } catch (Exception d) {
+            _val_.put("error", new Fail(d.getMessage(), "404"));
+            return gson.toJson(_val_);
+        }
+        Enchere am = new Enchere();
+        am.setUsersId(id);
+        Connection con = Connexion.getConn();
+//        String key = "";
+//        if (rq.getParameter("key") != null) {
+//            key = rq.getParameter("key");
+//        }
+        ArrayList<Enchere> tous = am.selectBySQL("select *from enchere en join categorie cat on cat.id=en.categorieid where descriproduit like '%" + key + "%' or cat.nom like '%" + key + "%'  and usersId=" + id + " order by en.id desc", con);
+        ArrayList<Enchere> touss = new ArrayList<>();
+        for (int i = 0; i < tous.size(); i++) {
+            Enchere uu = tous.get(i);
+            EncherePhoto g = new EncherePhoto();
+            g.setEnchereId(uu.getId());
+            uu.setDateFarany(uu.getDateFarany());
+            uu.setDepuis(uu.getDepuis());
+            Users u_ = new Users();
+            u_.setId(uu.getUsersId());
+            uu.setUser(u_.getUsers(con));
+            uu.setExpiration(uu.getExpiration());
+            uu.setPhoto(g.select(con));
+            Categorie gorie = new Categorie();
+            gorie.setId(uu.getCategorieId());
+            uu.setCat(gorie.getCategorie(con));
+            touss.add(uu);
+        }
+
+//        String texte = gson.toJson(am.select(null));
+//        return texte;
+        _val_.put("data", touss);
+        con.close();
+        return gson.toJson(_val_);
+    }
+
+
     @GetMapping("/users/{id}/encheres")
     String getOne(@PathVariable int id, @RequestHeader String token) throws Exception {
         HashMap _val_ = new HashMap<String, Object>();
@@ -230,6 +297,9 @@ public class UsersEnchereService {
             g.setEnchereId(uu.getId());
             uu.setDateFarany(uu.getDateFarany());
             uu.setDepuis(uu.getDepuis());
+            Users u_=new Users();
+            u_.setId(uu.getUsersId());
+            uu.setUser(u_.getUsers(con));
             uu.setExpiration(uu.getExpiration());
             uu.setPhoto(g.select(con));
             Categorie gorie = new Categorie();
@@ -237,13 +307,95 @@ public class UsersEnchereService {
             uu.setCat(gorie.getCategorie(con));
             touss.add(uu);
         }
-
-//        String texte = gson.toJson(am.select(null));
-//        return texte;
         _val_.put("data", touss);
         con.close();
         return gson.toJson(_val_);
     }
+    
+    @GetMapping("/users/{id}/encheresExpirer")
+    String encheresExpirer(@PathVariable int id, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+        
+        Gson gson = new Gson();
+        try {
+            TokenHandler tokens = new TokenHandler().ToToken(token);
+            int usersId = tokens.getUtilisateur();
+            System.err.println(usersId);
+        } catch (Exception d) {
+            _val_.put("error", new Fail(d.getMessage(), "404"));
+            return gson.toJson(_val_);
+        }
+        Enchere am = new Enchere();
+        am.setUsersId(id);
+                Connection con=Connexion.getConn();
+
+        ArrayList<Enchere> tous = am.selectBySQL("select *from enchere where usersId=" + id + " order by id desc", con);
+        ArrayList<Enchere> touss = new ArrayList<>();
+        for (int i = 0; i < tous.size(); i++) {
+            Enchere uu = tous.get(i);
+            if(uu.getExpiration()==true){
+            EncherePhoto g = new EncherePhoto();
+            g.setEnchereId(uu.getId());
+            uu.setDateFarany(uu.getDateFarany());
+            uu.setDepuis(uu.getDepuis());
+            Users u_=new Users();
+            u_.setId(uu.getUsersId());
+            uu.setUser(u_.getUsers(con));
+            uu.setExpiration(uu.getExpiration());
+            uu.setPhoto(g.select(con));
+            Categorie gorie = new Categorie();
+            gorie.setId(uu.getCategorieId());
+            uu.setCat(gorie.getCategorie(con));
+            touss.add(uu);
+        }
+        }
+        _val_.put("data", touss);
+        con.close();
+        return gson.toJson(_val_);
+    }
+    @GetMapping("/users/{id}/encheresEncours")
+    String enchereEncoure(@PathVariable int id, @RequestHeader String token) throws Exception {
+        HashMap _val_ = new HashMap<String, Object>();
+        
+        Gson gson = new Gson();
+        try {
+            TokenHandler tokens = new TokenHandler().ToToken(token);
+            int usersId = tokens.getUtilisateur();
+            System.err.println(usersId);
+        } catch (Exception d) {
+            _val_.put("error", new Fail(d.getMessage(), "404"));
+            return gson.toJson(_val_);
+        }
+        Enchere am = new Enchere();
+        am.setUsersId(id);
+                Connection con=Connexion.getConn();
+
+        ArrayList<Enchere> tous = am.selectBySQL("select *from enchere where usersId=" + id + " order by id desc", con);
+        ArrayList<Enchere> touss = new ArrayList<>();
+        for (int i = 0; i < tous.size(); i++) {
+            Enchere uu = tous.get(i);
+            if(uu.getExpiration()!=true){
+            EncherePhoto g = new EncherePhoto();
+            g.setEnchereId(uu.getId());
+            uu.setDateFarany(uu.getDateFarany());
+            uu.setDepuis(uu.getDepuis());
+            Users u_=new Users();
+            u_.setId(uu.getUsersId());
+            uu.setUser(u_.getUsers(con));
+            uu.setExpiration(uu.getExpiration());
+            uu.setPhoto(g.select(con));
+            Categorie gorie = new Categorie();
+            gorie.setId(uu.getCategorieId());
+            uu.setCat(gorie.getCategorie(con));
+            touss.add(uu);
+        }
+        }
+        _val_.put("data", touss);
+        con.close();
+        return gson.toJson(_val_);
+    }
+    
+    
     
     @GetMapping("/users/{id}/encheres/search")
     String recherhce(@PathVariable int id, HttpServletRequest request, @RequestHeader String token) throws Exception {

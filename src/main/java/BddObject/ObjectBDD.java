@@ -250,7 +250,7 @@ public class ObjectBDD {
         return r;
     }
 
-    public ArrayList select(Connection connect) throws Exception {
+     public ArrayList select(Connection connect) throws Exception {
         Vector vect = new Vector();
         Object objet = this;
         int cpt = 0;

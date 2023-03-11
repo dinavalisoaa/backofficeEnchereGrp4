@@ -4,16 +4,12 @@ package com.legal.legal.webservice;
 import com.google.gson.Gson;
 import java.util.HashMap;
 import model.*;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import utils.Data;
 import utils.Fail;
 import utils.Message;
 import utils.Success;
@@ -104,7 +100,7 @@ public class UsersController {
             zateur.setDtn(dtn);
             zateur.setLogin(email);
             zateur.setMdp(pwds);
-            zateur.setGenreid(Integer.parseInt(genreid));
+            zateur.setGenreId(Integer.parseInt(genreid));
             zateur.insert(null);
 
             Compte com = new Compte();
@@ -119,6 +115,7 @@ public class UsersController {
             String oi = new TokenHandler().CreerToken(id);
             _val_.put("datas", new Success(id, oi));
         } catch (Exception xc) {
+            xc.printStackTrace();
             _val_.put("datas", new Fail(xc.getMessage(), "500"));
         } finally {
             return gson.toJson(_val_);

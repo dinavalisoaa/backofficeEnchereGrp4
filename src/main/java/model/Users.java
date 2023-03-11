@@ -31,7 +31,7 @@ public class Users extends ObjectBDD {
     String mdp;
     String prenom;
     String dtn;
-    private int genreid;
+    private int genreId=-1;
     @Ignore
     private int nbEnchereFait;
     @Ignore
@@ -303,12 +303,11 @@ public class Users extends ObjectBDD {
         this.nbrechargeCompte = nbrechargeCompte;
     }
 
-    public int getGenreid() {
-        return genreid;
+    public int getGenreId() {
+        return genreId;
     }
 
-    public void setGenreid(int genreid) {
-        this.genreid = genreid;
-    }
-    
+    public void setGenreId(int genreId) {
+        this.genreId = genreId;
+    }    
 }
